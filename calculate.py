@@ -7,8 +7,8 @@ import png
 
 def convert(x, y, deg=None):
     """przygotowywuje punkty do obliczeń"""
-    resX = 640
-    resY = 480
+    resX = 480
+    resY = 640
     x -= (resX / 2)
     y = (resY / 2) - y
     return x, y, deg
@@ -18,6 +18,7 @@ def calculate(x=0, y=0, deg=0):
     """używa układy współrzędnych o punkcie (0,0) na środku zdjęcia"""
     """do obliczeń na pomiarach kamer na bokach"""
     # stałe parametry kamery:
+    x, y, deg = convert(x,y,deg)
     f = 577  # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
     k = 173  # k - odległość kamera-środek "tacki" w mm
     laserDEG = 30  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
@@ -102,6 +103,7 @@ def extract(filename, folder, stepDEGR=1):
     # filename = filename.lstrip('images/')  # Gets rid of directory name
     cam_no = int(filename[0])
     deg = int(filename[2:]) * stepDEGR
+    deg = int(deg)
     if cam_no == 2:
         deg += 180
         if deg >= 360: deg -= 360
