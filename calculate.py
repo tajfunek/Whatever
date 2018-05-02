@@ -90,10 +90,10 @@ def calculateTOP(x=0, y=0, deg=0):
     return point
 
 
-def extract(filename, stepDEGR=1):
+def extract(filename, folder, stepDEGR=1):
     pic = []
     points = []
-    reader = png.Reader('images/' + filename + '.png')
+    reader = png.Reader(folder + filename + '.png')
     w, h, pixels, metadata = reader.read_flat()
     pixels = list(pixels)
 

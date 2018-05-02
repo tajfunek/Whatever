@@ -23,10 +23,7 @@ def calc_everything(tup):
     q = tup[1]
     filename = filename.rstrip('.png')
     extracted = c.extract(filename, IMAGES_FOLDER)
-    points = []
-    for point in extracted:
-        points.append(c.convert(point[0], point[1], point[2]))
-
+    
     output = []
     for point in points:
         output.append(c.calculate(point[0], point[1], point[2]))
@@ -40,8 +37,6 @@ def main():
     """Runs init() and manages threads"""
     _time = time.time()
     files = init()
-    files.sort()
-    files.reverse()
     m = mp.Manager()
     q = m.Queue()
 
@@ -53,22 +48,18 @@ def main():
     # Wait for first processes witch finish their jobs
     # time.sleep(3)
 
-    print('Processing queue')
     file = open('OUTPUT.txt', 'w')
     i = 0
     while i < len(files):
         if not q.empty():
-            print('Queue.')
             out = q.get()
             for line in out:
-                file.write('{} ; {} ; {}\n'.format(line[0], out[1], out[2]))
+                file.write('{} ; {} ; {}\n'.format(line[0], line[1], line[2]))
             i += 1
 
-    print('Closing')
     file.flush()
     file.close()
     workers.close()
-    print('Closed')
 
     print('Done! Time:', time.time() - _time)
 
