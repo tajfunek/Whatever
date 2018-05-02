@@ -23,9 +23,9 @@ def calc_everything(tup):
     q = tup[1]
     filename = filename.rstrip('.png')
     extracted = c.extract(filename, IMAGES_FOLDER)
-    
+
     output = []
-    for point in points:
+    for point in extracted:
         output.append(c.calculate(point[0], point[1], point[2]))
 
     q.put(output)
