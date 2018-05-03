@@ -7,7 +7,7 @@ import math
 import png
 
 
-def convert(x, y, deg=None):
+def convert(x, y, deg):
     """przygotowywuje punkty do obliczeń"""
     resX = 480
     resY = 640
@@ -20,7 +20,7 @@ def calculate(x=0, y=0, deg=0):
     """używa układy współrzędnych o punkcie (0,0) na środku zdjęcia"""
     """do obliczeń na pomiarach kamer na bokach"""
     # stałe parametry kamery:
-    x, y, deg = convert(x,y,deg)
+    x, y, deg = convert(x, y, deg)
     f = 577  # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
     k = 173  # k - odległość kamera-środek "tacki" w mm
     laserDEG = 30  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
@@ -38,7 +38,7 @@ def calculate(x=0, y=0, deg=0):
         elif x == 0:
             beta = 0
     else:
-        beta = math.degrees(math.atan(a / (k - r)))
+        beta = math.atan(a / (k - r))
 
     if x >= 0:
         Alpha = deg + beta
@@ -109,6 +109,7 @@ def extract(filename, folder, stepDEGR=1):
     if cam_no == 2:
         deg += 180
         if deg >= 360: deg -= 360
+    deg = math.radians(deg)
 
     for i in range(len(pixels)):
         if (i % 3) == 0:
@@ -218,9 +219,10 @@ def getpointAvg(row):
     return x
 
 def cartesian(H, r, alpha):
-    x = r * math.cos(math.radians(alpha))
-    y = r * math.sin(math.radians(alpha))
+    x = r * math.cos(alpha)
+    y = r * math.sin(alpha)
     return x, y, H
+
 
 def getpointConst2(row):
     """Ta nowa wolniejsza. W ramach optymalizacji zwiększono czas wykonywania o ok 3 sekundy"""
