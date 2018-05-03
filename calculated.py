@@ -3,7 +3,7 @@ import os
 import time
 import multiprocessing as mp
 
-IMAGES_FOLDER = 'images/'
+IMAGES_FOLDER = 'images1/'
 
 
 def init():
@@ -26,7 +26,7 @@ def calc_everything(tup):
 
     output = []
     for point in extracted:
-        output.append(c.calculate(point[0], point[1], point[2]))
+        output.append(*c.cartesian(c.calculate(point[0], point[1], point[2])))
 
     q.put(output)
 
@@ -37,6 +37,7 @@ def main():
     """Runs init() and manages threads"""
     _time = time.time()
     files = init()
+    files.sort()
     m = mp.Manager()
     q = m.Queue()
 

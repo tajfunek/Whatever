@@ -103,7 +103,7 @@ def extract(filename, folder, stepDEGR=1):
     # filename = filename.lstrip('images/')  # Gets rid of directory name
     cam_no = int(filename[0])
     deg = int(filename[2:]) * stepDEGR
-    deg = int(deg)
+    #deg = int(deg)
     if cam_no == 2:
         deg += 180
         if deg >= 360: deg -= 360
@@ -217,3 +217,8 @@ def getpointAvg(row):
         x = REDlist[0]
 
     return x
+
+    def cartesian(H, r, alpha):
+        x = r * math.cos(radians(alpha))
+        y = r * math.sin((radians(alpha)))
+        return x, y, H
