@@ -218,7 +218,7 @@ def getpointAvg(row):
 
     return x
 
-    def cartesian(H, r, alpha):
-        x = r * math.cos(radians(alpha))
-        y = r * math.sin((radians(alpha)))
-        return x, y, H
+def cartesian(H, r, alpha):
+    x = r * math.cos(math.radians(alpha))
+    y = r * math.sin(math.radians(alpha))
+    return x, y, H

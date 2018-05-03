@@ -26,7 +26,7 @@ def calc_everything(tup):
 
     output = []
     for point in extracted:
-        output.append(*c.cartesian(c.calculate(point[0], point[1], point[2])))
+        output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
 
     q.put(output)
 
