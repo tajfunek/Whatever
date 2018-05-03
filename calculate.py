@@ -45,7 +45,7 @@ def calculate(x=0, y=0, deg=0):
     elif x < 0:
         Alpha = deg - beta
 
-    point = [round(H, 2), round(R, 2), round(Alpha, 2)]
+    point = [H, R, Alpha]
     return point
 
 
@@ -89,7 +89,7 @@ def calculateTOP(x=0, y=0, deg=0):
     if alpha < 0:
         alpha += 360
 
-    point = [round(h, 2), round(R, 2), round(alpha, 2)]
+    point = [h, R, alpha]
     return point
 
 
@@ -132,37 +132,33 @@ def getpointConst(row):
     RED = 128
     REDlist = []
     sequences = []
-    global no
 
     for i in range(len(row)):
         if row[i] >= RED:
             REDlist.append(i)
     i = 0
     while i < len(REDlist):
-        if (REDlist[i] + 1) in REDlist:
+        if (REDlist[i] + 1 or REDlist[i] + 2) in REDlist:
             condition = 1
-        elif (REDlist[i] + 2) in REDlist:
-            condition = 1
-        else:
-            condition = 0
-            i += 1
-        temp = []
-        ii = i
-        while condition == 1:
-            temp.append(ii)
-            ii += 1
-            if (REDlist[ii] + 1) in REDlist:
-                condition = 1
-            elif (REDlist[ii] + 2) in REDlist:
-                condition = 1
-            else:
-                condition = 0
+            temp = []
+            ii = i
+            while condition == 1:
                 temp.append(ii)
-        sequences.append(temp)
-        i = i + len(temp)
-    if len(sequences) is 0:
-        print('Something is wrong!!!')
+                ii += 1
+                if (REDlist[ii] + 1 or REDlist[ii] + 2) in REDlist:
+                    condition = 1
+                else:
+                    condition = 0
+                    temp.append(ii)
+            sequences.append(temp)
+            i = i + len(temp)
+        else:
+            i += 1
+
+    if len(REDlist) is 0:
+        #print('Something is wrong!!!')
         return None
+
     if sequences[0]:
         longest = max(sequences)
         a = 0
@@ -171,6 +167,7 @@ def getpointConst(row):
             x = a / len(longest)
     else:
         x = REDlist[0]
+
     return x
 
 
@@ -224,3 +221,45 @@ def cartesian(H, r, alpha):
     x = r * math.cos(math.radians(alpha))
     y = r * math.sin(math.radians(alpha))
     return x, y, H
+
+def getpointConst2(row):
+    """Ta nowa wolniejsza. W ramach optymalizacji zwiększono czas wykonywania o ok 3 sekundy"""
+    """używa średniej arytmetycznej wszystkich pixeli które spełniają warunek"""
+    RED = 128
+    #REDlist = []
+    sequences = []
+    i = 0
+    while i < len(row):
+        if row[i] >= RED:
+            red = True
+            x = row[i]
+            if (row[i] + 1 or row[i] + 2) >= RED:
+                condition = 1
+                temp = []
+                ii = i
+                while condition == 1:
+                    temp.append(ii)
+                    ii += 1
+                    if (row[ii] + 1 or row[ii] + 2) >= RED:
+                        condition = 1
+                    else:
+                        condition = 0
+                        temp.append(ii)
+                        sequences.append(temp)
+                        i = i + len(temp)
+            else:
+                i += 1
+        else: i += 1
+
+    if red == False:
+        #print('Something is wrong!!!')
+        return None
+
+    if sequences[0]:
+        longest = max(sequences)
+        a = 0
+        for j in range(len(longest)):
+            a += row[longest[j]]
+            x = a / len(longest)
+
+    return x
