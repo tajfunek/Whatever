@@ -1,26 +1,29 @@
-#include <png.h>
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "png2.h"
 
-int main(void) {
-  clock_t start = clock();
-  FILE* fp = fopen("images1/1_000.png", "rb");
+PyObject* read_png(PyObject *self, PyObject *args) {
+  //clock_t start = clock();
+
+  // Reading file
+  FILE* fp = fopen(filename, "rb");
   if (!fp) {
     return 9;
   }
-  png_bytep *row_pointers;
+  // Initializing basic varibles
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   png_infop info = png_create_info_struct(png);
   setjmp(png_jmpbuf(png));
+
+  // Connetcing file to PNG_Structp
   png_init_io(png, fp);
   png_read_info(png, info);
+
+  // Reading basic informations about image
   int width = png_get_image_width(png, info);
   int height = png_get_image_height(png, info);
   png_byte color_type = png_get_color_type(png, info);
   png_byte bit_depth = png_get_bit_depth(png, info);
-  printf("%i",color_type);
 
+  // Chceking image
   if(bit_depth == 16)
     png_set_strip_16(png);
 
@@ -46,6 +49,8 @@ int main(void) {
 
   png_read_update_info(png, info);
 
+  // Reading image
+  png_bytep *row_pointers;
   row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
   for(int y = 0; y < height; y++) {
     row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png,info));
@@ -53,8 +58,9 @@ int main(void) {
 
   png_read_image(png, row_pointers);
 
+  // Closing file
   fclose(fp);
-  printf("\nTime: %e", (clock()-start)/CLOCKS_PER_SEC);
+  //printf("\n\n\nTime: %e\n\n\n", (clock()-start)/CLOCKS_PER_SEC);
   for(int y = 0; y < height; y++) {
     png_bytep row = row_pointers[y];
     for(int x = 0; x < width; x++) {
@@ -63,5 +69,5 @@ int main(void) {
       printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
     }
   }
-  return 0;
+  return row_pointers;
 }
