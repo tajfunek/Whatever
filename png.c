@@ -54,6 +54,7 @@ int main(void) {
   png_read_image(png, row_pointers);
 
   fclose(fp);
+  printf("\nTime: %e", (clock()-start)/CLOCKS_PER_SEC);
   for(int y = 0; y < height; y++) {
     png_bytep row = row_pointers[y];
     for(int x = 0; x < width; x++) {
@@ -62,6 +63,5 @@ int main(void) {
       printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
     }
   }
-  printf("\nTime: %e", (clock()-start)/CLOCKS_PER_SEC);
   return 0;
 }
