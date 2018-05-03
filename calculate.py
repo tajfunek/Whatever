@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 """Funkcje do obliczeń na danych punktach - pewnego rodzaju biblioteka."""
 """Wymagają modułu math!"""
 

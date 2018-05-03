@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import calculate as c
 import os
 import time
@@ -30,7 +32,7 @@ def calc_everything(tup):
 
     q.put(output)
 
-    # print('DONE!!!')
+    print('DONE!!!:', filename)
 
 
 def main():
