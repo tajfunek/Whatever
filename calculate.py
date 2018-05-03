@@ -226,6 +226,7 @@ def cartesian(H, r, alpha):
 
 def getpointConst2(row):
     """Ta nowa wolniejsza. W ramach optymalizacji zwiększono czas wykonywania o ok 3 sekundy"""
+    """Nie przesestowana do końca - brak pewności, że działa"""
     """używa średniej arytmetycznej wszystkich pixeli które spełniają warunek"""
     RED = 128
     #REDlist = []
