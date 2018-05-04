@@ -4,10 +4,13 @@
 """Wymagają modułu math!"""
 
 import math
-import png
+import PNG_read
 import time
 
-def convert(int x, int y, int deg):
+w = 20
+h = 3
+
+def convert(x, y, deg):
     """przygotowywuje punkty do obliczeń"""
     resX = 480
     resY = 640
@@ -97,9 +100,9 @@ def extract(filename, folder, stepDEGR=1):
     _time = time.time()
     pic = []
     points = []
-    reader = png.Reader(folder + filename + '.png')
-    w, h, pixels, metadata = reader.read_flat()
-    pixels = list(pixels)
+    # reader = png.Reader(folder + filename + '.png')
+    # w, h, pixels, metadata = reader.read_flat()
+    pixels = PNG_read.read(folder + filename + '.png')
     print('Reading time:', time.time()-_time)
 
     # This is done in other function
@@ -115,7 +118,7 @@ def extract(filename, folder, stepDEGR=1):
     deg = math.radians(deg)
 
     for i in range(len(pixels)):
-        if (i % 3) == 0:
+        if (i % 4) == 0:
             pic.append(pixels[i])
 
     for i in range(h):

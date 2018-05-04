@@ -5,7 +5,7 @@ import time
 import os
 import multiprocessing as mp
 
-IMAGES_FOLDER = 'images/'
+IMAGES_FOLDER = '.'
 
 
 def init():
