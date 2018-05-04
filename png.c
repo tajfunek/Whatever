@@ -1,7 +1,14 @@
 #include "png2.h"
 
 PyObject* read_png(PyObject *self, PyObject *args) {
-  //clock_t start = clock();
+  //clock_t start = clock()
+
+  // Parsing arguments
+  const char* filename;
+  if(!PyArgs_ParseTuple(args, "s", filename)) {
+    printf("Error while parsing args");
+    return NULL;
+  }
 
   // Reading file
   FILE* fp = fopen(filename, "rb");
@@ -16,6 +23,9 @@ PyObject* read_png(PyObject *self, PyObject *args) {
   // Connetcing file to PNG_Structp
   png_init_io(png, fp);
   png_read_info(png, info);
+
+  // Closing file
+  fclose(fp);
 
   // Reading basic informations about image
   int width = png_get_image_width(png, info);
@@ -58,16 +68,27 @@ PyObject* read_png(PyObject *self, PyObject *args) {
 
   png_read_image(png, row_pointers);
 
-  // Closing file
-  fclose(fp);
-  //printf("\n\n\nTime: %e\n\n\n", (clock()-start)/CLOCKS_PER_SEC);
-  for(int y = 0; y < height; y++) {
-    png_bytep row = row_pointers[y];
-    for(int x = 0; x < width; x++) {
-      png_bytep px = &(row[x * 4]);
-      // Do something awesome for each pixel here...
-      printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+  int length = width * height * 4;
+
+  // Converting 2D array row_pointers to 1D pixels for easier handling in python
+  int i, j;
+  unsigned char* pixels = malloc(length * sizeof(unsigned char));
+  for(i = 0; i < height; i++) {
+    for(j = 0; j < width; j++) {
+      pixels[i*height + j] = row_pointers[i][j]
     }
   }
-  return row_pointers;
+
+  // Creating Python List and filling it with metadata
+  PyObject* list = PyList_New((Py_ssize_t)length);
+  for(i = 0; i < length; i++) {
+    if(PyList_SetItem(list, (Py_ssize_t)i, pixels[i]) == -1) {
+      printf("Error while filling up list");
+      return NULL;
+    }
+
+    return list;
+  }
+
+  return;
 }
