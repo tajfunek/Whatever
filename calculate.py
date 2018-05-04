@@ -5,9 +5,9 @@
 
 import math
 import png
+import time
 
-
-def convert(x, y, deg):
+def convert(int x, int y, int deg):
     """przygotowywuje punkty do obliczeń"""
     resX = 480
     resY = 640
@@ -94,15 +94,18 @@ def calculateTOP(x=0, y=0, deg=0):
 
 
 def extract(filename, folder, stepDEGR=1):
+    _time = time.time()
     pic = []
     points = []
     reader = png.Reader(folder + filename + '.png')
     w, h, pixels, metadata = reader.read_flat()
     pixels = list(pixels)
+    print('Reading time:', time.time()-_time)
 
     # This is done in other function
     # filename = filename[:-4]  # Leaves file without expansion
     # filename = filename.lstrip('images/')  # Gets rid of directory name
+    _time = time.time()
     cam_no = int(filename[0])
     deg = int(filename[2:]) * stepDEGR
     #deg = int(deg)
@@ -124,6 +127,7 @@ def extract(filename, folder, stepDEGR=1):
         y = i
         data = [x, y, deg]
         points.append(data)
+    print('getpoint time:', time.time()-_time)
 
     return points
 

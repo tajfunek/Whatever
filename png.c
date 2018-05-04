@@ -1,26 +1,39 @@
-#include <png.h>
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "png2.h"
 
-int main(void) {
-  clock_t start = clock();
-  FILE* fp = fopen("images1/1_000.png", "rb");
+PyObject* read_png(PyObject *self, PyObject *args) {
+  //clock_t start = clock()
+
+  // Parsing arguments
+  const char* filename;
+  if(!PyArgs_ParseTuple(args, "s", filename)) {
+    printf("Error while parsing args");
+    return NULL;
+  }
+
+  // Reading file
+  FILE* fp = fopen(filename, "rb");
   if (!fp) {
     return 9;
   }
-  png_bytep *row_pointers;
+  // Initializing basic varibles
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   png_infop info = png_create_info_struct(png);
   setjmp(png_jmpbuf(png));
+
+  // Connetcing file to PNG_Structp
   png_init_io(png, fp);
   png_read_info(png, info);
+
+  // Closing file
+  fclose(fp);
+
+  // Reading basic informations about image
   int width = png_get_image_width(png, info);
   int height = png_get_image_height(png, info);
   png_byte color_type = png_get_color_type(png, info);
   png_byte bit_depth = png_get_bit_depth(png, info);
-  printf("%i",color_type);
 
+  // Chceking image
   if(bit_depth == 16)
     png_set_strip_16(png);
 
@@ -46,6 +59,8 @@ int main(void) {
 
   png_read_update_info(png, info);
 
+  // Reading image
+  png_bytep *row_pointers;
   row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
   for(int y = 0; y < height; y++) {
     row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png,info));
@@ -53,15 +68,27 @@ int main(void) {
 
   png_read_image(png, row_pointers);
 
-  fclose(fp);
-  printf("\nTime: %e", (clock()-start)/CLOCKS_PER_SEC);
-  for(int y = 0; y < height; y++) {
-    png_bytep row = row_pointers[y];
-    for(int x = 0; x < width; x++) {
-      png_bytep px = &(row[x * 4]);
-      // Do something awesome for each pixel here...
-      printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+  int length = width * height * 4;
+
+  // Converting 2D array row_pointers to 1D pixels for easier handling in python
+  int i, j;
+  unsigned char* pixels = malloc(length * sizeof(unsigned char));
+  for(i = 0; i < height; i++) {
+    for(j = 0; j < width; j++) {
+      pixels[i*height + j] = row_pointers[i][j]
     }
   }
-  return 0;
+
+  // Creating Python List and filling it with metadata
+  PyObject* list = PyList_New((Py_ssize_t)length);
+  for(i = 0; i < length; i++) {
+    if(PyList_SetItem(list, (Py_ssize_t)i, pixels[i]) == -1) {
+      printf("Error while filling up list");
+      return NULL;
+    }
+
+    return list;
+  }
+
+  return;
 }
