@@ -26,13 +26,13 @@ def calc_everything(tup):
     filename = filename.rstrip('.png')
     _time = time.time()
     extracted = c.extract(filename, IMAGES_FOLDER)
-    print('Extract time: ', time.time()-_time)
+    print('Extract time: ', time.time()-_time, '  File:  ', filename)
 
     _time = time.time()
     output = []
     for point in extracted:
-        output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
-    print('Calculate time: ', time.time()-_time)
+    output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
+    #print('Calculate time: ', time.time()-_time)
 
     q.put(output)
 
@@ -53,7 +53,7 @@ def main():
     _time = time.time()
     workers = mp.Pool(processes=8)  # Number of process it creates
     workers.map(calc_everything, tup)
-    print('Allocate time: ', time.time()-_time)
+    #print('Allocate time: ', time.time()-_time)
 
     # Wait for first processes witch finish their jobs
     # time.sleep(3)

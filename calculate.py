@@ -7,8 +7,8 @@ import math
 import PNG_read
 import time
 
-w = 20
-h = 3
+w = 480
+h = 640
 
 def convert(x, y, deg):
     """przygotowywuje punkty do obliczeń"""
@@ -103,7 +103,7 @@ def extract(filename, folder, stepDEGR=1):
     # reader = png.Reader(folder + filename + '.png')
     # w, h, pixels, metadata = reader.read_flat()
     pixels = PNG_read.read(folder + filename + '.png')
-    print('Reading time:', time.time()-_time)
+    #print('Reading time:', time.time()-_time)
 
     # This is done in other function
     # filename = filename[:-4]  # Leaves file without expansion
@@ -130,7 +130,7 @@ def extract(filename, folder, stepDEGR=1):
         y = i
         data = [x, y, deg]
         points.append(data)
-    print('getpoint time:', time.time()-_time)
+    #print('getpoint time:', time.time()-_time)
 
     return points
 
