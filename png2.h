@@ -1,5 +1,5 @@
 #include <Python.h>
-#include <png.h>
+#include <libpng/png.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>

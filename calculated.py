@@ -5,14 +5,14 @@ import time
 import os
 import multiprocessing as mp
 
-IMAGES_FOLDER = '.'
+IMAGES_FOLDER = 'images/'
 
 
 def init():
     """Saves to array 'files' names of all photos in images subdirectory"""
     files = []
     for file in os.listdir(IMAGES_FOLDER):
-        if file.endswith('.png') and not file.startswith('3'):
+        if file.endswith('.png'):
             files.append(file)
         # break     # Gets only first file, comment if you want more
 
@@ -30,8 +30,13 @@ def calc_everything(tup):
 
     _time = time.time()
     output = []
-    for point in extracted:
-    output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
+    if filename.startswith('3'):
+        #for point in extracted:
+            #output.append(c.cartesian(*c.calculateTOP(point[0], point[1], point[2])))
+        pass
+    else:
+        for point in extracted:
+            output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
     #print('Calculate time: ', time.time()-_time)
 
     q.put(output)
@@ -49,7 +54,7 @@ def main():
 
     tup = list(zip(files, [q] * len(files)))
     print('Starting!!!')
-
+    
     _time = time.time()
     workers = mp.Pool(processes=8)  # Number of process it creates
     workers.map(calc_everything, tup)
@@ -64,7 +69,7 @@ def main():
         if not q.empty():
             out = q.get()
             for line in out:
-                file.write('{} ; {} ; {}\n'.format(line[0], line[1], line[2]))
+                file.write('{} ; {} ; {}\r\n'.format(line[0], line[1], line[2]))
             i += 1
 
     file.flush()
