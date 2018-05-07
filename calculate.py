@@ -4,14 +4,20 @@
 """Wymagają modułu math!"""
 
 import math
-import PNG_read
+#import PNG_read
 #from skimage.io import imread
-#import png
+import png
 import time
 import numpy as np
 
-w = 480
-h = 640
+#wspólne stałe parametry kamery i skanera oraz zdjęcia:
+w = 480        # szerokość zdjęcia
+h = 640        # wysokość zdjęcia
+f = 640        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
+laserDEG = 26.565  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
+laserDIS = 50  # odległość kamera-laser w mm
+#odległość kamera-tacka oraaz camH muszą być podane osobno (niestety)
+
 
 def convert(x, y, deg):
     """przygotowywuje punkty do obliczeń"""
@@ -22,16 +28,20 @@ def convert(x, y, deg):
     return x, y, deg
 
 
+def cartesian(H, r, alpha):
+    x = r * math.cos(alpha)
+    y = r * math.sin(alpha)
+    return x, y, H
+
+
 def calculate(x=0, y=0, deg=0):
     """używa układy współrzędnych o punkcie (0,0) na środku zdjęcia"""
     """do obliczeń na pomiarach kamer na bokach"""
+    """teraz wywołuje też cartesian() na koniec"""
     # stałe parametry kamery:
     x, y, deg = convert(x, y, deg)
-    f = 577  # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
-    k = 173  # k - odległość kamera-środek "tacki" w mm
-    laserDEG = 30  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
-    laserDIS = 30  # odległość kamera-laser w mm
-    camH = 100  # wysokość na której znajduje się kamera w mm
+    k = 150  # k - odległość kamera-środek "tacki" w mm
+    camH = 50  # wysokość na której znajduje się kamera w mm
 
     # obliczenia:
     r = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
@@ -51,70 +61,41 @@ def calculate(x=0, y=0, deg=0):
     elif x < 0:
         Alpha = deg - beta
 
-    point = [H, R, Alpha]
+    X, Y, Z = cartesian(H, R, Alpha)
+    point = [X, Y, Z]
     return point
 
 
 def calculateTOP(x=0, y=0, deg=0):
     """Do obliczeń na pomiarach z kamery na górze"""
+    """zwraca o drazu punkt w układzie kartezjańskim!!!"""
+    """w przeciwieństwie do calculateTOP - działa"""
     # stałe parametry kamery:
-    f = 577
-    k = 250
-    laserDEG = 30
-    laserDIS = 30
-
+    k = 200
     x, y, deg = convert(x, y, deg)
     # obliczenia:
     h1 = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
-    H = k - h1
+    Z = k - h1
     a = x * h1 / f
-    r = y * h1 / f
-    R = math.sqrt(a ** 2 + r ** 2)
-    if r != 0:
-        beta = math.degrees(math.atan(a / r))
-
-    # ustalenie kąta (dużo przypadków)
-    if y == 0:
-        if x > 0:
-            alpha = deg + 90
-        if x < 0:
-            alpha = deg - 90
-        elif x == 0:
-            alpha = 0  # 0 ale to w sumie nie ma znaczenia, jest w puncie (0,0)
-    else:
-        if y > 0:
-            if x >= 0:
-                alpha = deg - beta
-            if x < 0:
-                alpha = deg + beta
-        if y < 0:
-            if x >= 0:
-                alpha = deg + beta + 180
-            if x < 0:
-                alpha = deg - beta + 180
-
-    if alpha < 0:
-        alpha += 360
-
-    point = [H, R, alpha]
-    return point
+    b = y * h1 / f
+    sin = math.sin(deg)
+    cos = math.cos(deg)
+    X = a * cos + b * sin
+    Y = -1 * a * sin + b * cos
+    #kartezjański układ współrzędnych!!!
+    point = [X, Y, Z]
+    return X, Y, Z
 
 
-def extract(filename, folder, stepDEGR=1):
+def extract(filename, foldername, stepDEGR=1):
     _time = time.time()
     pic = []
     points = []
-    #reader = png.Reader(folder + filename + '.png')
-    #w, h, pixels, metadata = reader.read_flat()
-    pixels = np.array(PNG_read.read(folder + filename + '.png'))
-    #print('Reading time:', time.time()-_time)
 
-    # This is done in other function
-    # filename = filename[:-4]  # Leaves file without expansion
-    # filename = filename.lstrip('images/')  # Gets rid of directory name
     #PyPNG:
-    #reader = png.Reader(filename + '.png')
-    #w, h, pixels, metadata = reader.read_flat()
+    reader = png.Reader(foldername + filename + '.png')
+    w, h, pixels, metadata = reader.read_flat()
+    np.array(pixels)
     # pixels = np.array(PNG_read.read(folder + filename + '.png'))
     #print('Reading time:', time.time()-_time)
     _time = time.time()
@@ -235,11 +216,6 @@ def getpointAvg(row):
 
     return x
 
-def cartesian(H, r, alpha):
-    x = r * math.cos(alpha)
-    y = r * math.sin(alpha)
-    return x, y, H
-
 
 def getpointConst2(row):
     """Ta nowa wolniejsza. W ramach optymalizacji zwiększono czas wykonywania o ok 3 sekundy"""
@@ -284,25 +260,48 @@ def getpointConst2(row):
 
     return x
 
-def calculateTOP2(x=0, y=0, deg=0):
+
+def calculateTOP_OLD(x=0, y=0, deg=0):
+    """stara wersja, nie działa poprawnie. zostawiona just in case"""
     """Do obliczeń na pomiarach z kamery na górze"""
-    """zwraca o drazu punkt w układzie kartezjańskim!!!"""
-    """w przeciwieństwie do calculateTOP - działa"""
     # stałe parametry kamery:
     f = 577
     k = 250
     laserDEG = 30
     laserDIS = 30
+
     x, y, deg = convert(x, y, deg)
     # obliczenia:
     h1 = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
-    Z = k - h1
+    H = k - h1
     a = x * h1 / f
-    b = y * h1 / f
-    sin = math.sin(deg)
-    cos = math.cos(deg)
-    X = a * cos + b * sin
-    Y = -1 * a * sin + b * cos
-    #kartezjański układ współrzędnych!!!
-    point = [X, Y, Z]
-    return X, Y, Z
+    r = y * h1 / f
+    R = math.sqrt(a ** 2 + r ** 2)
+    if r != 0:
+        beta = math.degrees(math.atan(a / r))
+
+    # ustalenie kąta (dużo przypadków)
+    if y == 0:
+        if x > 0:
+            alpha = deg + 90
+        if x < 0:
+            alpha = deg - 90
+        elif x == 0:
+            alpha = 0  # 0 ale to w sumie nie ma znaczenia, jest w puncie (0,0)
+    else:
+        if y > 0:
+            if x >= 0:
+                alpha = deg - beta
+            if x < 0:
+                alpha = deg + beta
+        if y < 0:
+            if x >= 0:
+                alpha = deg + beta + 180
+            if x < 0:
+                alpha = deg - beta + 180
+
+    if alpha < 0:
+        alpha += 360
+
+    point = [H, R, alpha]
+    return point
