@@ -31,9 +31,9 @@ def calc_everything(tup):
     _time = time.time()
     output = []
     if filename.startswith('3'):
+        pass
         #for point in extracted:
             #output.append(c.cartesian(*c.calculateTOP(point[0], point[1], point[2])))
-        pass
     else:
         for point in extracted:
             output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
@@ -54,7 +54,7 @@ def main():
 
     tup = list(zip(files, [q] * len(files)))
     print('Starting!!!')
-    
+
     _time = time.time()
     workers = mp.Pool(processes=8)  # Number of process it creates
     workers.map(calc_everything, tup)
