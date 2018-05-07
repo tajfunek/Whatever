@@ -54,7 +54,7 @@ def main():
 
     tup = list(zip(files, [q] * len(files)))
     print('Starting!!!')
-    
+
     _time = time.time()
     workers = mp.Pool(processes=8)  # Number of process it creates
     workers.map(calc_everything, tup)
