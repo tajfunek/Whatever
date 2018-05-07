@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
 
 #define CAMS_NO 3
 #define SOCK_NAME "./cam.socket"
@@ -15,6 +16,14 @@ struct cam_args_t {
   char cam[FILENAME_LEN];
   int socket;
 };
+
+struct motor_args_t {
+  int socket;
+};
+
+// Function declaration
+void cam(struct cam_args_t*);
+void motor(struct motor_args_t*);
 
 int main(void) {
   thrd_t cams[CAMS_NO];
@@ -40,10 +49,20 @@ int main(void) {
     args->socket = socket_d;
 
     // Creating thread and checking for error
-    if((cams[i] = thrd_create(cams[i], cam, args)) != thrd_success) {
-      printf("Unable to create thread");
+    if(thrd_create(cams[i], cam, args) != thrd_success) {
+      printf("Unable to create camera thread: %i", i);
       abort();
     }
+  }
+
+  // Arguments for servo function
+  motor_args_t* args;
+  args->socket = socket_d
+
+  // Create thread for servo controlling
+  if(thrd_create(motor, motor, args != thrd_success) {
+    printf("Unable to create motor thread");
+    abort();
   }
 
   // Deleting socket
