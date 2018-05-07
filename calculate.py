@@ -4,7 +4,7 @@
 """Wymagają modułu math!"""
 
 import math
-#import PNG_read
+import PNG_read
 #from skimage.io import imread
 import png
 import time
@@ -103,10 +103,11 @@ def extract(filename, folder, stepDEGR=1):
     _time = time.time()
     pic = []
     points = []
-    reader = png.Reader(folder + filename + '.png')
-    w, h, pixels, metadata = reader.read_flat()
-    # pixels = np.array(PNG_read.read(folder + filename + '.png'))
+    #reader = png.Reader(folder + filename + '.png')
+    #w, h, pixels, metadata = reader.read_flat()
+    pixels = np.array(PNG_read.read(folder + filename + '.png'))
     #print('Reading time:', time.time()-_time)
+
     # This is done in other function
     # filename = filename[:-4]  # Leaves file without expansion
     # filename = filename.lstrip('images/')  # Gets rid of directory name
