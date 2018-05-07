@@ -63,11 +63,12 @@ def calculateTOP(x=0, y=0, deg=0):
     laserDEG = 30
     laserDIS = 30
 
+    x, y, deg = convert(x, y, deg)
     # obliczenia:
     h1 = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
-    h = k - h1
-    a = x * h / f
-    r = y * h / f
+    H = k - h1
+    a = x * h1 / f
+    r = y * h1 / f
     R = math.sqrt(a ** 2 + r ** 2)
     if r != 0:
         beta = math.degrees(math.atan(a / r))
@@ -75,9 +76,9 @@ def calculateTOP(x=0, y=0, deg=0):
     # ustalenie kąta (dużo przypadków)
     if y == 0:
         if x > 0:
-            alpha = deg - 90
-        if x < 0:
             alpha = deg + 90
+        if x < 0:
+            alpha = deg - 90
         elif x == 0:
             alpha = 0  # 0 ale to w sumie nie ma znaczenia, jest w puncie (0,0)
     else:
@@ -95,22 +96,22 @@ def calculateTOP(x=0, y=0, deg=0):
     if alpha < 0:
         alpha += 360
 
-    point = [h, R, alpha]
+    point = [H, R, alpha]
     return point
 
 
-def extract(filename, folder, stepDEGR=1):
+def extract(filename, stepDEGR=1):
     _time = time.time()
     pic = []
     points = []
-    reader = png.Reader(folder + filename + '.png')
+
+    #PyPNG:
+    reader = png.Reader(filename + '.png')
     w, h, pixels, metadata = reader.read_flat()
     # pixels = np.array(PNG_read.read(folder + filename + '.png'))
     #print('Reading time:', time.time()-_time)
-    # This is done in other function
-    # filename = filename[:-4]  # Leaves file without expansion
-    # filename = filename.lstrip('images/')  # Gets rid of directory name
     _time = time.time()
+    filename = filename.rstrip(".png")
     cam_no = int(filename[0])
     deg = int(filename[2:]) * stepDEGR
     #deg = int(deg)
@@ -275,3 +276,26 @@ def getpointConst2(row):
             x = a / len(longest)
 
     return x
+
+def calculateTOP2(x=0, y=0, deg=0):
+    """Do obliczeń na pomiarach z kamery na górze"""
+    """zwraca o drazu punkt w układzie kartezjańskim!!!"""
+    """w przeciwieństwie do calculateTOP - działa"""
+    # stałe parametry kamery:
+    f = 577
+    k = 250
+    laserDEG = 30
+    laserDIS = 30
+    x, y, deg = convert(x, y, deg)
+    # obliczenia:
+    h1 = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
+    Z = k - h1
+    a = x * h1 / f
+    b = y * h1 / f
+    sin = math.sin(deg)
+    cos = math.cos(deg)
+    X = a * cos + b * sin
+    Y = -1 * a * sin + b * cos
+    #kartezjański układ współrzędnych!!!
+    point = [X, Y, Z]
+    return X, Y, Z
