@@ -31,12 +31,12 @@ def calc_everything(tup):
     _time = time.time()
     output = []
     if filename.startswith('3'):
-        pass
-        #for point in extracted:
-            #output.append(c.cartesian(*c.calculateTOP(point[0], point[1], point[2])))
+        #pass
+        for point in extracted:
+            output.append(*c.calculateTOP(point[0], point[1], point[2]))
     else:
         for point in extracted:
-            output.append(c.cartesian(*c.calculate(point[0], point[1], point[2])))
+            output.append(*c.calculate(point[0], point[1], point[2]))
     #print('Calculate time: ', time.time()-_time)
 
     q.put(output)
