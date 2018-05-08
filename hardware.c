@@ -123,9 +123,9 @@ int main(void) {
   for(int i = 0; i < CAMS_NO; i++) {
 
     // Filling up args struct for every camera
-    args[i].socket = socket_d,
-    args[i].addr = (struct sockaddr*)&addr
-    
+    args[i].socket = socket_d;
+    args[i].addr = (struct sockaddr*)&addr;
+
     int error;
     if((error = sprintf(args[i].cam, "/dev/video%i\0", i)) != FILENAME_LEN-1) {
       printf("Error while filling up args: %i,   %i,    %s", i, error, args[i].cam);
