@@ -52,7 +52,7 @@ int main(void) {
     abort();
   }
 
-  // Binding with file
+  // Binding wiht file
   struct sockaddr_un* addr;
   addr->sun_family = AF_UNIX;
   addr->sun_path = SOCK_NAME;
@@ -75,7 +75,7 @@ int main(void) {
     struct cam_args_t* args;
     sprintf(&args->cam, "/dev/video%i", i);
     args->socket = socket_d;
-    args->addr = (struct sockaddr*)addr;
+    args->addr = addr;
 
     // Creating thread and checking for error
     if(pthread_create(&cams[i], cam, args) != thrd_success) {
@@ -87,7 +87,7 @@ int main(void) {
   // Arguments for servo function
   struct motor_args_t* args;
   args->socket = socket_d
-  args->addr = (struct sockaddr*)addr;
+  args->addr = addr
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
