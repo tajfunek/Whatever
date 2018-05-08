@@ -101,15 +101,17 @@ int main(void) {
   char buf[20];
   for(int i = 0; i < THREADS_NO; /* INSIDE LOOP */) {
     if((ids[i]->socket = accept(socket_d, addr, sizeof(sockaddr_un)) != -1) {
-      read(ids[i]->socket,buf, sizeof(buf));
+      recv(ids[i]->socket,buf, sizeof(buf), 0);
       strncpy(ids[i]->id, buf, 15);
       printf("Connected to %s", ids[i]->id)
       i++;
     } else continue;
   }
 
+
+
   // Closing connections
-  for(int  i = 0; i < THREADS_NO; i++) {
+  for(int  i = 0; i < THREADeS_NO; i++) {
     shutdown(ids[i]->socket, SHUT_WR);
   }
   // Deleting socket
@@ -119,6 +121,8 @@ int main(void) {
 }
 
 void cam(struct cam_args_t args) {
+  char buf[20];
+
   // Setting process priority
   errno = 0;
   nice(-3);
@@ -127,9 +131,20 @@ void cam(struct cam_args_t args) {
     abort();
   }
 
+  sprintf(buf, "%i;%s", atoi(args->cam[11]), args->cam);
   if(connect(args->socket, args->addr, sizeof(sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s", args->cam);
     abort();
+  }
+
+  if(write(args->socket, buf, strlen(buf)) == -1) {
+    if(errno == ENADF) {
+      printf("Incorrect socket pointer");
+      abort();
+    } else {
+      printf("Unable to write");
+      abort();
+    }
   }
 
 
