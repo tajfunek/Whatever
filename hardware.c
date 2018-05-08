@@ -131,6 +131,7 @@ int main(void) {
       printf("Error while filling up args: %i,   %i,    %s", i, error, args[i].cam);
       abort();
     }
+    printf("Creating cam thread: %s", args[i].cam);
 
     // Creating thread and checking for error
     if(pthread_create(&cams[i], NULL, &cam, (void*)&args[i]) != SUCCESS) {
