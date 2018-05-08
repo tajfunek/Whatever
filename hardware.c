@@ -38,7 +38,8 @@ void* motor(void* args_void);
 void* cam(void* args_void) {
   sleep(1);
   char buf[20];
-  struct cam_args_t* args = (struct cam_args_t*)args_void;
+  struct cam_args_t args = *((struct cam_args_t*)args_void);
+  printf("Thread up: %s", args.cam);
 
   // Setting process priority
   errno = 0;
@@ -48,8 +49,8 @@ void* cam(void* args_void) {
     abort();
   }
 
-  sprintf(buf, "%i;%s", atoi(&(args->cam[11])), args->cam);
-  if(connect(args->socket, args->addr, sizeof(struct sockaddr_un)) != 0) {
+  sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
+  if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
     printf("Unable to connect to socket: %s", args->cam);
     abort();
   }
@@ -63,6 +64,7 @@ void* cam(void* args_void) {
 
 void* motor(void* args_void) {
   sleep(1);
+  printf("Thread up: motor");
   // Setting process priority
   struct motor_args_t* args = (struct motor_args_t*)args_void;
   errno = 0;
