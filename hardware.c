@@ -39,7 +39,7 @@ void* cam(void* args_void) {
   sleep(1);
   char buf[20];
   struct cam_args_t args = *((struct cam_args_t*)args_void);
-  printf("Thread up: %s", args.cam);
+  printf("Thread up: %s \n", args.cam);
   sleep(1);
 
   // Setting process priority
@@ -65,7 +65,7 @@ void* cam(void* args_void) {
 
 void* motor(void* args_void) {
   sleep(1);
-  printf("Thread up: motor");
+  printf("Thread up: motor\n");
   sleep(1);
   // Setting process priority
   struct motor_args_t* args = (struct motor_args_t*)args_void;
@@ -123,10 +123,9 @@ int main(void) {
   for(int i = 0; i < CAMS_NO; i++) {
 
     // Filling up args struct for every camera
-    args[i] = {
-      .socket = socket_d,
-      .addr = (struct sockaddr*)&addr
-    };
+    args[i].socket = socket_d,
+    args[i].addr = (struct sockaddr*)&addr
+    
     int error;
     if((error = sprintf(args[i].cam, "/dev/video%i\0", i)) != FILENAME_LEN-1) {
       printf("Error while filling up args: %i,   %i,    %s", i, error, args[i].cam);
@@ -142,7 +141,7 @@ int main(void) {
 
   // Arguments for servo function
   printf("Creating thread for motor\n");
-  struct motor_args_t args = {
+  struct motor_args_t args_motor = {
     .socket = socket_d,
     .addr = (struct sockaddr*)&addr
   };
