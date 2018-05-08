@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/types.h>a
+#include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
 
@@ -43,9 +43,10 @@ int main(void) {
   }
 
   pthread_t cams[CAMS_NO];
+  int socket_d;
 
   // Creating socket for Inter-Process Communication with childs
-  if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0) == -1) {
+  if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
     printf("Unable to create socket");
     abort();
   }
