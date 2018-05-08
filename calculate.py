@@ -87,13 +87,13 @@ def calculateTOP(x=0, y=0, deg=0):
     return X, Y, Z
 
 
-def extract(filename, foldername, stepDEGR=1):
+def extract(filename, folder, stepDEGR=1):
     _time = time.time()
     pic = []
     points = []
 
     #PyPNG:
-    reader = png.Reader(foldername + filename + '.png')
+    reader = png.Reader(folder + filename + '.png')
     w, h, pixels, metadata = reader.read_flat()
     np.array(pixels)
     # pixels = np.array(PNG_read.read(folder + filename + '.png'))
