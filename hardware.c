@@ -121,7 +121,7 @@ int main(void) {
       .addr = (struct sockaddr*)&addr
     };
     int error;
-    if((error = sprintf(args.cam, "/dev/video%i", i)) != FILENAME_LEN) {
+    if((error = sprintf(args.cam, "/dev/video%i\0", i)) != FILENAME_LEN) {
       printf("Error while filling up args: %i,   %i", i, error);
       abort();
     }
