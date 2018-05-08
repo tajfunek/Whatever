@@ -41,7 +41,7 @@ def calc_everything(tup):
 
     q.put(output)
 
-    # print('DONE!!!')
+    print('DONE!!!', filename, '\n')
 
 
 def main():
@@ -76,7 +76,7 @@ def main():
     file.close()
     workers.close()
 
-    print('Done! Time:', time.time() - _time)
+    print('Done Everything! Time:', time.time() - _time)
 
     """with open('OUTPUT.txt', 'a') as f:
         for file in os.listdir('Outputs/'):

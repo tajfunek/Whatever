@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/types.h>
+#include <sys/types.h>a
 #include <unistd.h>
 #include <errno.h>
 
@@ -103,11 +103,15 @@ int main(void) {
     if((ids[i]->socket = accept(socket_d, addr, sizeof(sockaddr_un)) != -1) {
       read(ids[i]->socket,buf, sizeof(buf));
       strncpy(ids[i]->id, buf, 15);
+      printf("Connected to %s", ids[i]->id)
       i++;
     } else continue;
   }
 
-
+  // Closing connections
+  for(int  i = 0; i < THREADS_NO; i++) {
+    shutdown(ids[i]->socket, SHUT_WR);
+  }
   // Deleting socket
   unlink(SOCK_NAME);
 
@@ -127,7 +131,7 @@ void cam(struct cam_args_t args) {
     printf("Unable to connect to socket: %s", args->cam);
     abort();
   }
-  
+
 
 }
 
