@@ -56,9 +56,9 @@ void* cam(void* args_void) {
   if(write(args->socket, buf, strlen(buf)) == -1) {
     printf("Unable to write");
     abort();
-}
+  }
 
-
+  return;
 }
 
 
@@ -71,6 +71,8 @@ void* motor(void* args_void) {
     printf("Unable to lower process priority");
     abort();
   }
+
+  return;
 }
 
 
@@ -87,13 +89,16 @@ int main(void) {
   int socket_d;
 
   // Creating socket for Inter-Process Communication with childs
+  printf("Creating socket...\n");
   if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
     printf("Unable to create socket");
     abort();
   }
 
   // Binding with file
+  printf("Binding...\n");
   struct sockaddr_un* addr;
+  memset(addr, 0, sizeof(*addr));
   addr->sun_family = AF_UNIX;
   strncpy(addr->sun_path, "./temp", sizeof(addr->sun_path)-1);
   if(bind(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un)) != 0) {
@@ -102,6 +107,7 @@ int main(void) {
   }
 
   //Starting to listen for connections
+  printf("Listening...\n");
   if(listen(socket_d, 8) != 0) {
     printf("Unable to listen on socket");
     abort();
@@ -125,6 +131,7 @@ int main(void) {
   }
 
   // Arguments for servo function
+  printf("Creating thread for motor\n");
   struct motor_args_t* args;
   args->socket = socket_d;
   args->addr = (struct sockaddr*)addr;
@@ -139,6 +146,7 @@ int main(void) {
   sleep(1);
 
   // Accepting connections from threads
+  printf("Waiting for connection...\n");
   struct client_t* ids[THREADS_NO];
   char buf[20];
   size_t socklen = sizeof(struct sockaddr_un);
@@ -146,7 +154,7 @@ int main(void) {
     if((ids[i]->socket = accept(socket_d, (struct sockaddr*)addr, (socklen_t*)&socklen)) != -1) {
       recv(ids[i]->socket,buf, sizeof(buf), 0);
       strncpy(ids[i]->id, buf, 15);
-      printf("Connected to %s", ids[i]->id);
+      printf("Connected to %s\n", ids[i]->id);
       i++;
     } else continue;
   }
