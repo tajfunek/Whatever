@@ -120,8 +120,8 @@ int main(void) {
       .socket = socket_d,
       .addr = (struct sockaddr*)&addr
     };
-    if(sprintf(args.cam, "/dev/video%i", i) != 12) {
-      printf("Error while filling up args: %i", i);
+    if((error = sprintf(&(args.cam), "/dev/video%i", i)) != FILENAME_LEN {
+      printf("Error while filling up args: %i,   %i", i, error);
       abort();
     }
 
