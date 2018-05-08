@@ -59,7 +59,7 @@ void* cam(void* args_void) {
 
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
   errno = 0;
-  printf("SOCKET: %i\n", args.socket);
+  printf("SOCKET: %i\n", socket_d);
   if(connect(socket_d, &addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s\n", args.cam);
     printf("Error: %i\n", errno);
@@ -92,6 +92,7 @@ void* motor(void* args_void) {
     printf("Unable to create socket\n");
     abort();
   }
+  printf("SOCKET: %i", socket_d);
 
   if(connect(socket_d, &addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: motor\n");
