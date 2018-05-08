@@ -33,8 +33,6 @@ struct client_t {
 void cam(struct cam_args_t* args);
 void motor(struct motor_args_t* args);
 
-const char SOCK_NAME[] = "./hard.socket";
-
 int main(void) {
   // Setting process priority
   errno = 0;
@@ -56,7 +54,7 @@ int main(void) {
   // Binding with file
   struct sockaddr_un* addr;
   addr->sun_family = AF_UNIX;
-  addr->sun_path = SOCK_NAME;
+  addr->sun_path = "./temp";
   if(bind(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to bind file to socket");
     abort();
@@ -79,7 +77,7 @@ int main(void) {
     args->addr = (struct sockaddr*)addr;
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], &cam, args) != thrd_success) {
+    if(pthread_create(&cams[i], NULL, &cam, args) != thrd_success) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -92,7 +90,7 @@ int main(void) {
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
-  if(pthread_create(motor_thread, &motor, args) != thrd_success) {
+  if(pthread_create(motor_thread, NULL, &motor, args) != thrd_success) {
     printf("Unable to create motor thread");
     abort();
   }
@@ -103,10 +101,10 @@ int main(void) {
   struct client_t* ids[THREADS_NO];
   char buf[20];
   for(int i = 0; i < THREADS_NO; /* INSIDE LOOP */) {
-    if((ids[i]->socket = accept(socket_d, addr, sizeof(sockaddr_un))) != -1) {
+    if((ids[i]->socket = accept(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un))) != -1) {
       recv(ids[i]->socket,buf, sizeof(buf), 0);
       strncpy(ids[i]->id, buf, 15);
-      printf("Connected to %s", ids[i]->id)
+      printf("Connected to %s", ids[i]->id);
       i++;
     } else continue;
   }
