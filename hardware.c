@@ -143,6 +143,7 @@ int main(void) {
   };
 
   // Create thread for servo controlling
+  printf("Creating thread...\n");
   pthread_t* motor_thread;
   if(pthread_create(motor_thread, NULL, &motor, &args) != SUCCESS) {
     printf("Unable to create motor thread");
