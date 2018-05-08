@@ -118,22 +118,23 @@ int main(void) {
   }
 
   // Creating thread to manage every camera
+  struct cam_args_t args[3];
   printf("Creating threads for cams\n");
   for(int i = 0; i < CAMS_NO; i++) {
 
     // Filling up args struct for every camera
-    struct cam_args_t args = {
+    args[i] = {
       .socket = socket_d,
       .addr = (struct sockaddr*)&addr
     };
     int error;
-    if((error = sprintf(args.cam, "/dev/video%i\0", i)) != FILENAME_LEN-1) {
-      printf("Error while filling up args: %i,   %i,    %s", i, error, args.cam);
+    if((error = sprintf(args[i].cam, "/dev/video%i\0", i)) != FILENAME_LEN-1) {
+      printf("Error while filling up args: %i,   %i,    %s", i, error, args[i].cam);
       abort();
     }
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], NULL, &cam, (void*)&args) != SUCCESS) {
+    if(pthread_create(&cams[i], NULL, &cam, (void*)&args[i]) != SUCCESS) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
