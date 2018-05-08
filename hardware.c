@@ -51,11 +51,11 @@ void* cam(void* args_void) {
 
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
   if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
-    printf("Unable to connect to socket: %s", args->cam);
+    printf("Unable to connect to socket: %s", args.cam);
     abort();
   }
 
-  if(write(args->socket, buf, strlen(buf)) == -1) {
+  if(write(args.socket, buf, strlen(buf)) == -1) {
     printf("Unable to write");
     abort();
   }
