@@ -54,7 +54,7 @@ int main(void) {
   // Binding with file
   struct sockaddr_un* addr;
   addr->sun_family = AF_UNIX;
-  addr->sun_path = "./temp";
+  strncpy(addr->sun_path, "./temp", sizeof(addr->sun_path)-1);
   if(bind(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to bind file to socket");
     abort();
