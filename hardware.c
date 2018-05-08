@@ -118,7 +118,7 @@ int main(void) {
     args->addr = (struct sockaddr*)addr;
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], NULL, &&cam, args) != SUCCESS) {
+    if(pthread_create(&cams[i], NULL, &cam, args) != SUCCESS) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -131,7 +131,7 @@ int main(void) {
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
-  if(pthread_create(motor_thread, NULL, &&motor, args) != SUCCESS) {
+  if(pthread_create(motor_thread, NULL, &motor, args) != SUCCESS) {
     printf("Unable to create motor thread");
     abort();
   }
@@ -141,8 +141,9 @@ int main(void) {
   // Accepting connections from threads
   struct client_t* ids[THREADS_NO];
   char buf[20];
+  size_t socklen = sizeof(struct sockaddr_un);
   for(int i = 0; i < THREADS_NO; /* INSIDE LOOP */) {
-    if((ids[i]->socket = accept(socket_d, (struct sockaddr*)addr, &sizeof(struct sockaddr_un))) != -1) {
+    if((ids[i]->socket = accept(socket_d, (struct sockaddr*)addr, (socklen_t*)&socklen)) != -1) {
       recv(ids[i]->socket,buf, sizeof(buf), 0);
       strncpy(ids[i]->id, buf, 15);
       printf("Connected to %s", ids[i]->id);
