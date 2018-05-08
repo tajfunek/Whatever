@@ -55,7 +55,7 @@ int main(void) {
   struct sockaddr_un* addr;
   addr->sun_family = AF_UNIX;
   addr->sun_path = SOCK_NAME;
-  if(bind(socket_d, addr, sizeof(sockaddr_un)) != 0) {
+  if(bind(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to bind file to socket");
     abort();
   }
@@ -71,7 +71,7 @@ int main(void) {
   for(int i = 0; i < CAMS_NO; i++) {
 
     // Filling up args struct for every camera
-    cam_args_t* args;
+    struct cam_args_t* args;
     sprintf(&args->cam, "/dev/video%i", i);
     args->socket = socket_d;
     args->addr = addr;
@@ -84,13 +84,13 @@ int main(void) {
   }
 
   // Arguments for servo function
-  motor_args_t* args;
+  struct motor_args_t* args;
   args->socket = socket_d
   args->addr = addr
 
   // Create thread for servo controlling
-  pthread_t* motor;
-  if(pthread_create(motor, motor, args != thrd_success) {
+  pthread_t* motor_thread;
+  if(pthread_create(motor_thread, motor, args) != thrd_success) {
     printf("Unable to create motor thread");
     abort();
   }
