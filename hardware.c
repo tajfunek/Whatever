@@ -116,13 +116,17 @@ int main(void) {
   for(int i = 0; i < CAMS_NO; i++) {
 
     // Filling up args struct for every camera
-    struct cam_args_t* args;
-    sprintf(args->cam, "/dev/video%i", i);
-    args->socket = socket_d;
-    args->addr = (struct sockaddr*)&addr;
+    struct cam_args_t args = {
+      .socket = socket_d,
+      .addr = (struct sockaddr*)&addr
+    };
+    if(sprintf(args.cam, "/dev/video%i", i) != 12) {
+      printf("Error while filling up args: %i", i);
+      abort();
+    }
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], NULL, &cam, args) != SUCCESS) {
+    if(pthread_create(&cams[i], NULL, &cam, &args) != SUCCESS) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -130,9 +134,10 @@ int main(void) {
 
   // Arguments for servo function
   printf("Creating thread for motor\n");
-  struct motor_args_t* args;
-  args->socket = socket_d;
-  args->addr = (struct sockaddr*)&addr;
+  struct motor_args_t args = {
+    .socket = socket_d,
+    .addr = (struct sockaddr*)&addr
+  };
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
