@@ -133,21 +133,16 @@ void cam(struct cam_args_t* args) {
     abort();
   }
 
-  sprintf(buf, "%i;%s", atoi(args->cam[11]), args->cam);
-  if(connect(args->socket, args->addr, sizeof(sockaddr_un)) != 0) {
+  sprintf(buf, "%i;%s", atoi(*(args->cam[11])), args->cam);
+  if(connect(args->socket, args->addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s", args->cam);
     abort();
   }
 
   if(write(args->socket, buf, strlen(buf)) == -1) {
-    if(errno == ENADF) {
-      printf("Incorrect socket pointer");
-      abort();
-    } else {
-      printf("Unable to write");
-      abort();
-    }
-  }
+    printf("Unable to write");
+    abort();
+}
 
 
 }
