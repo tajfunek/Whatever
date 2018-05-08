@@ -31,11 +31,11 @@ struct client_t {
 };
 
 // Function declaration
-void cam(void* args_void);
-void motor(void* args_void);
+void* cam(void* args_void);
+void* motor(void* args_void);
 
 // Function definitions
-void cam(void* args_void) {
+void* cam(void* args_void) {
   char buf[20];
   struct cam_args_t* args = (struct cam_args_t*)args_void;
 
@@ -62,7 +62,7 @@ void cam(void* args_void) {
 }
 
 
-void motor(void* args_void) {
+void* motor(void* args_void) {
   // Setting process priority
   struct motor_args_t* args = (struct motor_args_t*)args_void;
   errno = 0;
