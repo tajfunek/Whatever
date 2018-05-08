@@ -51,9 +51,11 @@ void* cam(void* args_void) {
   }
 
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
+  errno = 0;
+  printf("SOCKET: %i\n", args.socket);
   if(connect(args.socket, args.addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s\n", args.cam);
-    printf("Error: %i", errno);
+    printf("Error: %i\n", errno);
     abort();
   }
 
@@ -79,7 +81,7 @@ void* motor(void* args_void) {
 
   if(connect(args.socket, args.addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: motor\n");
-    printf("Error: %i", errno);
+    printf("Error: %i\n", errno);
     abort();
   }
 }
@@ -123,6 +125,7 @@ int main(void) {
     printf("Unable to listen on socket\n");
     abort();
   }
+  printf("SOCKET: %i\n", socket_d);
 
   // Creating thread to manage every camera
   struct cam_args_t args[3];
