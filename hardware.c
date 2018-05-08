@@ -50,6 +50,7 @@ void* cam(void* args_void) {
     abort();
   }
 
+  int socket_d;
   if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
     printf("Unable to create socket\n");
     abort();
@@ -84,6 +85,7 @@ void* motor(void* args_void) {
     abort();
   }
 
+  int socket_d;
   if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
     printf("Unable to create socket\n");
     abort();
