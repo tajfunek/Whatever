@@ -10,7 +10,6 @@
 #include <errno.h>
 
 #define CAMS_NO 3
-#define SOCK_NAME "./cam.socket"
 #define FILENAME_LEN 12
 #define THREADS_NO 4
 
@@ -33,6 +32,8 @@ struct client_t {
 // Function declaration
 void cam(struct cam_args_t* args);
 void motor(struct motor_args_t* args);
+
+const char SOCK_NAME[] = "./hard.socket";
 
 int main(void) {
   // Setting process priority
@@ -73,12 +74,12 @@ int main(void) {
 
     // Filling up args struct for every camera
     struct cam_args_t* args;
-    sprintf(&args->cam, "/dev/video%i", i);
+    sprintf(args->cam, "/dev/video%i", i);
     args->socket = socket_d;
     args->addr = (struct sockaddr*)addr;
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], cam, args) != thrd_success) {
+    if(pthread_create(&cams[i], &cam, args) != thrd_success) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -91,7 +92,7 @@ int main(void) {
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
-  if(pthread_create(motor_thread, motor, args) != thrd_success) {
+  if(pthread_create(motor_thread, &motor, args) != thrd_success) {
     printf("Unable to create motor thread");
     abort();
   }
