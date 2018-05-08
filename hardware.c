@@ -69,7 +69,7 @@ void* motor(void* args_void) {
   printf("Thread up: motor\n");
   sleep(1);
   // Setting process priority
-  struct motor_args_t* args = (struct motor_args_t*)args_void;
+  struct motor_args_t args = *((struct motor_args_t*)args_void);
   errno = 0;
   nice(-4);
   if(errno != 0) {
