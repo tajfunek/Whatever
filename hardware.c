@@ -57,8 +57,6 @@ void* cam(void* args_void) {
     printf("Unable to write");
     abort();
   }
-
-  return;
 }
 
 
@@ -71,8 +69,6 @@ void* motor(void* args_void) {
     printf("Unable to lower process priority");
     abort();
   }
-
-  return;
 }
 
 
@@ -96,11 +92,11 @@ int main(void) {
   }
 
   // Binding with file
-  printf("Binding...\n");
+  printf("Preparation for binding...\n");
   struct sockaddr_un* addr;
-  memset(addr, 0, sizeof(*addr));
-  addr->sun_family = AF_UNIX;
-  strncpy(addr->sun_path, "./temp", sizeof(addr->sun_path)-1);
+  *(addr).sun_family = AF_UNIX;
+  strncpy(*(addr).sun_path, "./temp", sizeof(*(addr).sun_path)-1);
+  printf("Bind\n");
   if(bind(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to bind file to socket");
     abort();
