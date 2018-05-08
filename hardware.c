@@ -96,6 +96,7 @@ int main(void) {
   struct sockaddr_un addr= {
     .sun_family = AF_UNIX,
     .sun_path = "./temp"
+  };
   //strncpy(*(addr).sun_path, "./temp", sizeof(*(addr).sun_path)-1);
   printf("Bind\n");
   if(bind(socket_d, (struct sockaddr*)&addr, sizeof(struct sockaddr_un)) != 0) {
