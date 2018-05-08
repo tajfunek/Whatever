@@ -50,16 +50,21 @@ void* cam(void* args_void) {
     abort();
   }
 
+  if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
+    printf("Unable to create socket\n");
+    abort();
+  }
+
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
   errno = 0;
   printf("SOCKET: %i\n", args.socket);
-  if(connect(args.socket, args.addr, sizeof(struct sockaddr_un)) != 0) {
+  if(connect(socket_d, args.addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s\n", args.cam);
     printf("Error: %i\n", errno);
     abort();
   }
 
-  if(write(args.socket, buf, strlen(buf)) == -1) {
+  if(write(socket_d, buf, strlen(buf)) == -1) {
     printf("Unable to write\n");
     abort();
   }
@@ -79,7 +84,12 @@ void* motor(void* args_void) {
     abort();
   }
 
-  if(connect(args.socket, args.addr, sizeof(struct sockaddr_un)) != 0) {
+  if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
+    printf("Unable to create socket\n");
+    abort();
+  }
+
+  if(connect(socket_d, args.addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: motor\n");
     printf("Error: %i\n", errno);
     abort();
