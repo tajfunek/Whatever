@@ -12,6 +12,7 @@
 #define CAMS_NO 3
 #define FILENAME_LEN 12
 #define THREADS_NO 4
+#define SUCCESS 0
 
 struct cam_args_t {
   char cam[FILENAME_LEN];
@@ -30,8 +31,8 @@ struct client_t {
 };
 
 // Function declaration
-void cam(struct cam_args_t* args);
-void motor(struct motor_args_t* args);
+void cam(void* args);
+void motor(void* args);
 
 int main(void) {
   // Setting process priority
@@ -77,7 +78,7 @@ int main(void) {
     args->addr = (struct sockaddr*)addr;
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], NULL, &cam, args) != thrd_success) {
+    if(pthread_create(&cams[i], NULL, &cam, args) != SUCCESS) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -90,7 +91,7 @@ int main(void) {
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
-  if(pthread_create(motor_thread, NULL, &motor, args) != thrd_success) {
+  if(pthread_create(motor_thread, NULL, &motor, args) != SUCCESS) {
     printf("Unable to create motor thread");
     abort();
   }
@@ -101,7 +102,7 @@ int main(void) {
   struct client_t* ids[THREADS_NO];
   char buf[20];
   for(int i = 0; i < THREADS_NO; /* INSIDE LOOP */) {
-    if((ids[i]->socket = accept(socket_d, (struct sockaddr*)addr, sizeof(struct sockaddr_un))) != -1) {
+    if((ids[i]->socket = accept(socket_d, (struct sockaddr*)addr, &sizeof(struct sockaddr_un))) != -1) {
       recv(ids[i]->socket,buf, sizeof(buf), 0);
       strncpy(ids[i]->id, buf, 15);
       printf("Connected to %s", ids[i]->id);
@@ -123,6 +124,7 @@ int main(void) {
 
 void cam(struct cam_args_t* args) {
   char buf[20];
+  struct cam_args_t* args = (struct cam_args_t*)args;
 
   // Setting process priority
   errno = 0;
@@ -148,6 +150,7 @@ void cam(struct cam_args_t* args) {
 
 void motor(struct motor_args_t* args) {
   // Setting process priority
+  struct motor_args_t* args = (struct motor_args_t*)args;
   errno = 0;
   nice(-4);
   if(errno != 0) {
