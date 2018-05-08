@@ -36,6 +36,7 @@ void* motor(void* args_void);
 
 // Function definitions
 void* cam(void* args_void) {
+  sleep(1);
   char buf[20];
   struct cam_args_t* args = (struct cam_args_t*)args_void;
 
@@ -61,6 +62,7 @@ void* cam(void* args_void) {
 
 
 void* motor(void* args_void) {
+  sleep(1);
   // Setting process priority
   struct motor_args_t* args = (struct motor_args_t*)args_void;
   errno = 0;
@@ -146,8 +148,6 @@ int main(void) {
     printf("Unable to create motor thread");
     abort();
   }
-
-  sleep(1);
 
   // Accepting connections from threads
   printf("Waiting for connection...\n");
