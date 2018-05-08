@@ -46,18 +46,19 @@ void* cam(void* args_void) {
   errno = 0;
   nice(-3);
   if(errno != 0) {
-    printf("Unable to lower process priority");
+    printf("Unable to lower process priority\n");
     abort();
   }
 
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
   if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
-    printf("Unable to connect to socket: %s", args.cam);
+    printf("Unable to connect to socket: %s\n", args.cam);
+    printf("Error: %i", errno);
     abort();
   }
 
   if(write(args.socket, buf, strlen(buf)) == -1) {
-    printf("Unable to write");
+    printf("Unable to write\n");
     abort();
   }
 }
@@ -72,7 +73,13 @@ void* motor(void* args_void) {
   errno = 0;
   nice(-4);
   if(errno != 0) {
-    printf("Unable to lower process priority");
+    printf("Unable to lower process priority\n");
+    abort();
+  }
+
+  if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
+    printf("Unable to connect to socket: %s\n", args.cam);
+    printf("Error: %i", errno);
     abort();
   }
 }
@@ -83,7 +90,7 @@ int main(void) {
   errno = 0;
   nice(-4);
   if(errno != 0) {
-    printf("Unable to lower process priority");
+    printf("Unable to lower process priority\n");
     abort();
   }
 
@@ -93,7 +100,7 @@ int main(void) {
   // Creating socket for Inter-Process Communication with childs
   printf("Creating socket...\n");
   if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
-    printf("Unable to create socket");
+    printf("Unable to create socket\n");
     abort();
   }
 
@@ -106,14 +113,14 @@ int main(void) {
   //strncpy(*(addr).sun_path, "./temp", sizeof(*(addr).sun_path)-1);
   printf("Bind\n");
   if(bind(socket_d, (struct sockaddr*)&addr, sizeof(struct sockaddr_un)) != 0) {
-    printf("Unable to bind file to socket");
+    printf("Unable to bind file to socket\n");
     abort();
   }
 
   //Starting to listen for connections
   printf("Listening...\n");
   if(listen(socket_d, 8) != 0) {
-    printf("Unable to listen on socket");
+    printf("Unable to listen on socket\n");
     abort();
   }
 
@@ -128,14 +135,14 @@ int main(void) {
 
     int error;
     if((error = sprintf(args[i].cam, "/dev/video%i\0", i)) != FILENAME_LEN-1) {
-      printf("Error while filling up args: %i,   %i,    %s", i, error, args[i].cam);
+      printf("Error while filling up args: %i,   %i,    %s\n", i, error, args[i].cam);
       abort();
     }
-    printf("Creating cam thread: %s", args[i].cam);
+    printf("Creating cam thread: %s\n", args[i].cam);
 
     // Creating thread and checking for error
     if(pthread_create(&cams[i], NULL, &cam, (void*)&args[i]) != SUCCESS) {
-      printf("Unable to create camera thread: %i", i);
+      printf("Unable to create camera thread: %i\n", i);
       abort();
     }
   }
@@ -151,7 +158,7 @@ int main(void) {
   printf("Creating thread...\n");
   pthread_t motor_thread;
   if(pthread_create(&motor_thread, NULL, &motor, (void*)&args) != SUCCESS) {
-    printf("Unable to create motor thread");
+    printf("Unable to create motor thread\n");
     abort();
   }
 
