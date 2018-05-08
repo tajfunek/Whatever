@@ -51,7 +51,7 @@ void* cam(void* args_void) {
   }
 
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
-  if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
+  if(connect(args.socket, args.addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s\n", args.cam);
     printf("Error: %i", errno);
     abort();
@@ -77,7 +77,7 @@ void* motor(void* args_void) {
     abort();
   }
 
-  if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
+  if(connect(args.socket, args.addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: motor\n");
     printf("Error: %i", errno);
     abort();
