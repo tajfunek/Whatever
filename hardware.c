@@ -34,6 +34,46 @@ struct client_t {
 void cam(void* args_void);
 void motor(void* args_void);
 
+// Function definitions
+void cam(void* args_void) {
+  char buf[20];
+  struct cam_args_t* args = (struct cam_args_t*)args_void;
+
+  // Setting process priority
+  errno = 0;
+  nice(-3);
+  if(errno != 0) {
+    printf("Unable to lower process priority");
+    abort();
+  }
+
+  sprintf(buf, "%i;%s", atoi(&(args->cam[11])), args->cam);
+  if(connect(args->socket, args->addr, sizeof(struct sockaddr_un)) != 0) {
+    printf("Unable to connect to socket: %s", args->cam);
+    abort();
+  }
+
+  if(write(args->socket, buf, strlen(buf)) == -1) {
+    printf("Unable to write");
+    abort();
+}
+
+
+}
+
+
+void motor(void* args_void) {
+  // Setting process priority
+  struct motor_args_t* args = (struct motor_args_t*)args_void;
+  errno = 0;
+  nice(-4);
+  if(errno != 0) {
+    printf("Unable to lower process priority");
+    abort();
+  }
+}
+
+
 int main(void) {
   // Setting process priority
   errno = 0;
@@ -120,41 +160,4 @@ int main(void) {
   unlink("./temp");
 
   return 0;
-}
-
-void cam(void* args_void) {
-  char buf[20];
-  struct cam_args_t* args = (struct cam_args_t*)args_void;
-
-  // Setting process priority
-  errno = 0;
-  nice(-3);
-  if(errno != 0) {
-    printf("Unable to lower process priority");
-    abort();
-  }
-
-  sprintf(buf, "%i;%s", atoi(&(args->cam[11])), args->cam);
-  if(connect(args->socket, args->addr, sizeof(struct sockaddr_un)) != 0) {
-    printf("Unable to connect to socket: %s", args->cam);
-    abort();
-  }
-
-  if(write(args->socket, buf, strlen(buf)) == -1) {
-    printf("Unable to write");
-    abort();
-}
-
-
-}
-
-void motor(void* args_void) {
-  // Setting process priority
-  struct motor_args_t* args = (struct motor_args_t*)args_void;
-  errno = 0;
-  nice(-4);
-  if(errno != 0) {
-    printf("Unable to lower process priority");
-    abort();
-  }
 }
