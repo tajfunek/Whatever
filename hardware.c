@@ -78,7 +78,7 @@ void* motor(void* args_void) {
   }
 
   if(connect(args.socket, args.addr, sizeof(struct sockaddr)) != 0) {
-    printf("Unable to connect to socket: %s\n", args.cam);
+    printf("Unable to connect to socket: motor\n");
     printf("Error: %i", errno);
     abort();
   }
