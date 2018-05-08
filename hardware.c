@@ -129,7 +129,7 @@ int main(void) {
     }
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], NULL, &cam, &args) != SUCCESS) {
+    if(pthread_create(&cams[i], NULL, &cam, (void*)&args) != SUCCESS) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -144,8 +144,8 @@ int main(void) {
 
   // Create thread for servo controlling
   printf("Creating thread...\n");
-  pthread_t* motor_thread;
-  if(pthread_create(motor_thread, NULL, &motor, &args) != SUCCESS) {
+  pthread_t motor_thread;
+  if(pthread_create(&motor_thread, NULL, &motor, (void*)&args) != SUCCESS) {
     printf("Unable to create motor thread");
     abort();
   }
