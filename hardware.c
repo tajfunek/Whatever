@@ -78,7 +78,7 @@ int main(void) {
     args->addr = (struct sockaddr*)addr;
 
     // Creating thread and checking for error
-    if(pthread_create(&cams[i], NULL, &cam, args) != SUCCESS) {
+    if(pthread_create(&cams[i], NULL, &&cam, args) != SUCCESS) {
       printf("Unable to create camera thread: %i", i);
       abort();
     }
@@ -91,7 +91,7 @@ int main(void) {
 
   // Create thread for servo controlling
   pthread_t* motor_thread;
-  if(pthread_create(motor_thread, NULL, &motor, args) != SUCCESS) {
+  if(pthread_create(motor_thread, NULL, &&motor, args) != SUCCESS) {
     printf("Unable to create motor thread");
     abort();
   }
