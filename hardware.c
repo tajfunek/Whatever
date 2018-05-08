@@ -31,8 +31,8 @@ struct client_t {
 };
 
 // Function declaration
-void cam(void* args);
-void motor(void* args);
+void cam(void* args_void);
+void motor(void* args_void);
 
 int main(void) {
   // Setting process priority
@@ -86,7 +86,7 @@ int main(void) {
 
   // Arguments for servo function
   struct motor_args_t* args;
-  args->socket = socket_d
+  args->socket = socket_d;
   args->addr = (struct sockaddr*)addr;
 
   // Create thread for servo controlling
@@ -117,14 +117,14 @@ int main(void) {
     shutdown(ids[i]->socket, SHUT_WR);
   }
   // Deleting socket
-  unlink(SOCK_NAME);
+  unlink("./temp");
 
   return 0;
 }
 
-void cam(struct cam_args_t* args) {
+void cam(void* args_void) {
   char buf[20];
-  struct cam_args_t* args = (struct cam_args_t*)args;
+  struct cam_args_t* args = (struct cam_args_t*)args_void;
 
   // Setting process priority
   errno = 0;
@@ -148,9 +148,9 @@ void cam(struct cam_args_t* args) {
 
 }
 
-void motor(struct motor_args_t* args) {
+void motor(void* args_void) {
   // Setting process priority
-  struct motor_args_t* args = (struct motor_args_t*)args;
+  struct motor_args_t* args = (struct motor_args_t*)args_void;
   errno = 0;
   nice(-4);
   if(errno != 0) {
