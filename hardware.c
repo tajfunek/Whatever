@@ -102,7 +102,7 @@ int main(void) {
   struct client_t* ids[THREADS_NO];
   char buf[20];
   for(int i = 0; i < THREADS_NO; /* INSIDE LOOP */) {
-    if((ids[i]->socket = accept(socket_d, addr, sizeof(sockaddr_un)) != -1) {
+    if((ids[i]->socket = accept(socket_d, addr, sizeof(sockaddr_un))) != -1) {
       recv(ids[i]->socket,buf, sizeof(buf), 0);
       strncpy(ids[i]->id, buf, 15);
       printf("Connected to %s", ids[i]->id)
@@ -113,7 +113,7 @@ int main(void) {
 
 
   // Closing connections
-  for(int  i = 0; i < THREADeS_NO; i++) {
+  for(int  i = 0; i < THREADS_NO; i++) {
     shutdown(ids[i]->socket, SHUT_WR);
   }
   // Deleting socket
@@ -133,7 +133,7 @@ void cam(struct cam_args_t* args) {
     abort();
   }
 
-  sprintf(buf, "%i;%s", atoi(*(args->cam[11])), args->cam);
+  sprintf(buf, "%i;%s", atoi(&(args->cam[11])), args->cam);
   if(connect(args->socket, args->addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s", args->cam);
     abort();
