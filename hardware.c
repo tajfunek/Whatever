@@ -17,12 +17,12 @@
 struct cam_args_t {
   char cam[FILENAME_LEN];
   int socket;
-  struct sockaddr* addr;
+  struct sockaddr_un* addr;
 };
 
 struct motor_args_t {
   int socket;
-  struct sockaddr* addr;
+  struct sockaddr_un* addr;
 };
 
 struct client_t {
@@ -39,6 +39,8 @@ void* cam(void* args_void) {
   sleep(1);
   char buf[20];
   struct cam_args_t args = *((struct cam_args_t*)args_void);
+  int socket_d;
+  struct sockaddr addr= *((struct sockaddr*)args.addr);
   printf("Thread up: %s \n", args.cam);
   sleep(1);
 
@@ -50,7 +52,6 @@ void* cam(void* args_void) {
     abort();
   }
 
-  int socket_d;
   if((socket_d = socket(PF_UNIX, SOCK_STREAM, 0)) == -1) {
     printf("Unable to create socket\n");
     abort();
@@ -59,7 +60,7 @@ void* cam(void* args_void) {
   sprintf(buf, "%i;%s", atoi(&(args.cam[11])), args.cam);
   errno = 0;
   printf("SOCKET: %i\n", args.socket);
-  if(connect(socket_d, args.addr, sizeof(struct sockaddr_un)) != 0) {
+  if(connect(socket_d, &addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: %s\n", args.cam);
     printf("Error: %i\n", errno);
     abort();
@@ -79,6 +80,7 @@ void* motor(void* args_void) {
   // Setting process priority
   struct motor_args_t args = *((struct motor_args_t*)args_void);
   errno = 0;
+  struct sockaddr addr= *((struct sockaddr*)args.addr);
   nice(-4);
   if(errno != 0) {
     printf("Unable to lower process priority\n");
@@ -91,7 +93,7 @@ void* motor(void* args_void) {
     abort();
   }
 
-  if(connect(socket_d, args.addr, sizeof(struct sockaddr_un)) != 0) {
+  if(connect(socket_d, &addr, sizeof(struct sockaddr_un)) != 0) {
     printf("Unable to connect to socket: motor\n");
     printf("Error: %i\n", errno);
     abort();
@@ -122,7 +124,7 @@ int main(void) {
   printf("Preparation for binding...\n");
   struct sockaddr_un addr= {
     .sun_family = AF_UNIX,
-    .sun_path = "./temp"
+    .sun_path = "\0socket"
   };
   //strncpy(*(addr).sun_path, "./temp", sizeof(*(addr).sun_path)-1);
   printf("Bind\n");
@@ -146,7 +148,7 @@ int main(void) {
 
     // Filling up args struct for every camera
     args[i].socket = socket_d;
-    args[i].addr = (struct sockaddr*)&addr;
+    args[i].addr = &addr;
 
     int error;
     if((error = sprintf(args[i].cam, "/dev/video%i\0", i)) != FILENAME_LEN-1) {
@@ -166,7 +168,7 @@ int main(void) {
   printf("Creating thread for motor\n");
   struct motor_args_t args_motor = {
     .socket = socket_d,
-    .addr = (struct sockaddr*)&addr
+    .addr = &addr
   };
 
   // Create thread for servo controlling
