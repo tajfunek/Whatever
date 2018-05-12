@@ -42,7 +42,8 @@ for i in range(turns):
             #print("Done")
         error1 = error1.decode('utf-8')
         for line in error1.splitlines():
-            if line.startswith('Error') or line.startswith('stat'):
+            #if line.startswith('Error') or line.startswith('stat'):
+            if "error" or "stat" in line:
                 error = 1
                 #break
 
@@ -67,7 +68,8 @@ for i in range(turns):
             #print("Done")
         error1 = error1.decode('utf-8')
         for line in error1.splitlines():
-            if line.startswith('Error') or line.startswith('stat'):
+            #if line.startswith('Error') or line.startswith('stat'):
+            if "error" or "stat" in line:
                 error = 1
                 #break
 
@@ -93,7 +95,8 @@ for i in range(turns):
             #print("Done")
         error1 = error1.decode('utf-8')
         for line in error1.splitlines():
-            if line.startswith('Error') or line.startswith('stat'):
+            #if line.startswith('Error') or line.startswith('stat'):
+            if "error" or "stat" in line:
                 error = 1
                 #break
 
