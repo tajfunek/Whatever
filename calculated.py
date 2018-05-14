@@ -6,7 +6,7 @@ import os
 import multiprocessing as mp
 
 IMAGES_FOLDER = 'images/'
-
+progress = 0
 
 def init():
     """Saves to array 'files' names of all photos in images subdirectory"""
@@ -21,6 +21,7 @@ def init():
 
 def calc_everything(tup):
     """"Designed to be run in other tread. Calculates everything"""
+    global progress
     filename = tup[0]
     q = tup[1]
     filename = filename.rstrip('.png')
@@ -40,8 +41,8 @@ def calc_everything(tup):
     #print('Calculate time: ', time.time()-_time)
 
     q.put(output)
-
-    print('DONE!!!', filename, '\n')
+    progress = progress + 1
+    print('DONE!!!', filename, "progress: ", progress, '\n')
 
 
 def main():
