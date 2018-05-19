@@ -15,7 +15,7 @@ w = 1024        # szerokość zdjęcia
 h = 1280        # wysokość zdjęcia
 f = 1155        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
 laserDEG = 29  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
-laserDIS = 90  # odległość kamera-laser w mm
+laserDIS = 100  # odległość kamera-laser w mm
 #odległość kamera-tacka oraaz camH muszą być podane osobno (niestety)
 
 
@@ -41,7 +41,7 @@ def calculate(x=0, y=0, deg=0):
     # stałe parametry kamery:
     x, y, deg = convert(x, y, deg)
     k = 136  # k - odległość kamera-środek "tacki" w mm
-    camH = 75  # wysokość na której znajduje się kamera w mm
+    camH = 70  # wysokość na której znajduje się kamera w mm
 
     # obliczenia:
     r = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
@@ -63,12 +63,7 @@ def calculate(x=0, y=0, deg=0):
 
     X, Y, Z = cartesian(H, R, Alpha)
     point = [X, Y, Z]
-    if point[2] < 0:
-        return None
-    elif math.sqrt(point[0]**2 + point[1]**2) > 16:
-        return None
-    else:
-        return point
+    return point
 
 
 def calculateTOP(x=0, y=0, deg=0):
@@ -133,7 +128,7 @@ def extract(filename, folder, stepDEGR=1):
 
 def getpointConst(row):
     """używa średniej arytmetycznej wszystkich pixeli które spełniają warunek"""
-    RED = 240
+    RED = 200
     REDlist = []
     sequences = []
 
