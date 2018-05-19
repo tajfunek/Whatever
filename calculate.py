@@ -63,7 +63,12 @@ def calculate(x=0, y=0, deg=0):
 
     X, Y, Z = cartesian(H, R, Alpha)
     point = [X, Y, Z]
-    return point
+    if point[2] < 0:
+        return None
+    elif math.sqrt(point[0]**2 + point[1]**2) > 16:
+        return None
+    else:
+        return point
 
 
 def calculateTOP(x=0, y=0, deg=0):
@@ -128,7 +133,7 @@ def extract(filename, folder, stepDEGR=1):
 
 def getpointConst(row):
     """używa średniej arytmetycznej wszystkich pixeli które spełniają warunek"""
-    RED = 128
+    RED = 240
     REDlist = []
     sequences = []
 

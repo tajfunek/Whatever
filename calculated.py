@@ -8,6 +8,7 @@ import multiprocessing as mp
 IMAGES_FOLDER = 'images_new/'
 output_filename = 'OUTPUT.txt'
 progress = 0
+step = 4
 stepDEGR = 180/(256/step)
 def init():
     """Saves to array 'files' names of all photos in images subdirectory"""
