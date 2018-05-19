@@ -11,18 +11,18 @@ import time
 import numpy as np
 
 #wspólne stałe parametry kamery i skanera oraz zdjęcia:
-w = 480        # szerokość zdjęcia
-h = 640        # wysokość zdjęcia
-f = 640        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
-laserDEG = 26.565  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
-laserDIS = 50  # odległość kamera-laser w mm
+w = 1024        # szerokość zdjęcia
+h = 1280        # wysokość zdjęcia
+f = 1155        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
+laserDEG = 29  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
+laserDIS = 90  # odległość kamera-laser w mm
 #odległość kamera-tacka oraaz camH muszą być podane osobno (niestety)
 
 
 def convert(x, y, deg):
     """przygotowywuje punkty do obliczeń"""
-    resX = 480
-    resY = 640
+    resX = w
+    resY = h
     x -= (resX / 2)
     y = (resY / 2) - y
     return x, y, deg
@@ -40,8 +40,8 @@ def calculate(x=0, y=0, deg=0):
     """teraz wywołuje też cartesian() na koniec"""
     # stałe parametry kamery:
     x, y, deg = convert(x, y, deg)
-    k = 150  # k - odległość kamera-środek "tacki" w mm
-    camH = 50  # wysokość na której znajduje się kamera w mm
+    k = 136  # k - odległość kamera-środek "tacki" w mm
+    camH = 75  # wysokość na której znajduje się kamera w mm
 
     # obliczenia:
     r = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
@@ -154,20 +154,23 @@ def getpointConst(row):
         else:
             i += 1
 
-    if len(REDlist) is 0:
-        #print('Something is wrong!!!')
-        return None
-
-    if sequences[0]:
-        longest = max(sequences)
-        a = 0
-        for j in range(len(longest)):
-            a += REDlist[longest[j]]
-            x = a / len(longest)
-    else:
-        x = REDlist[0]
-
-    return x
+    try:
+        if sequences[0]:
+            longest = max(sequences)
+            a = 0
+            for j in range(len(longest)):
+                a += REDlist[longest[j]]
+                x = a / len(longest)
+        else:
+            x = REDlist[0]
+        return x
+    except:
+        if len(REDlist) is 0:
+            #print('Something is wrong!!!')
+            return None
+        else:
+            x = REDlist[0]
+            return x
 
 
 def getpointAvg(row):

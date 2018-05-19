@@ -5,10 +5,10 @@ import time
 import os
 import multiprocessing as mp
 
-IMAGES_FOLDER = 'images/'
+IMAGES_FOLDER = 'images_new/'
 output_filename = 'OUTPUT.txt'
 progress = 0
-
+stepDEGR = 180/(256/step)
 def init():
     """Saves to array 'files' names of all photos in images subdirectory"""
     files = []
@@ -27,7 +27,7 @@ def calc_everything(tup):
     q = tup[1]
     filename = filename.rstrip('.png')
     _time = time.time()
-    extracted = c.extract(filename, IMAGES_FOLDER)
+    extracted = c.extract(filename, IMAGES_FOLDER, stepDEGR)
     #print('Extract time: ', time.time()-_time, '  File:  ', filename)
 
     _time = time.time()
