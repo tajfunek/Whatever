@@ -6,6 +6,7 @@ import os
 import multiprocessing as mp
 
 IMAGES_FOLDER = 'images/'
+output_filename = 'OUTPUT.txt'
 progress = 0
 
 def init():
@@ -64,7 +65,7 @@ def main():
     # Wait for first processes witch finish their jobs
     # time.sleep(3)
 
-    file = open('OUTPUT.txt', 'w')
+    file = open(output_filename, 'w')
     i = 0
     while i < len(files):
         if not q.empty():
