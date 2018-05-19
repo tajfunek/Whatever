@@ -13,9 +13,9 @@ os.nice(-5)
 driver.setup()
 GPIO.setup((21, 20), GPIO.OUT)
 print("Starting...\n")
-stepdeg = 64*8 # resolution - sth is wrong 64*8 is 360deg. not 64*64
+stepdeg = 4 # resolution - sth is wrong 64*8 is 360deg. not 64*64
 motor_time = 10 # in ms, '10' Can be changed to lower if works
-turns = int(64*8/stepdeg)
+turns = int((64*8)/(stepdeg*2))
 
 for i in range(turns):
     print("ITERATION: ", i)
@@ -33,6 +33,7 @@ for i in range(turns):
         try:
             #print("Communication")
             _, error1 = cam1.communicate(timeout = 10)
+            print(error1)
         except:
             cam1.kill()
             print("ERROR")
@@ -61,6 +62,7 @@ for i in range(turns):
         try:
             #print("Communication")
             _, error1 = cam1.communicate(timeout = 10)
+            print(error1)
         except:
             cam1.kill()
             print("ERROR")
@@ -78,7 +80,7 @@ for i in range(turns):
             error = 1
 
     #print("CAM3")
-    GPIO.output(21, 0)
+    '''GPIO.output(21, 0)
     GPIO.output(20, 1)
     error = 1
     while error:
@@ -90,6 +92,7 @@ for i in range(turns):
         try:
             #print("Communication")
             _, error1 = cam1.communicate(timeout = 10)
+            print(error1)
         except:
             cam1.kill()
             print("ERROR")
@@ -104,7 +107,7 @@ for i in range(turns):
                 error = 1
                 #break"""
         if "Writing PNG image to 'images_new/" not in error1:
-            error = 1
+            error = 1'''
 
     driver.forward(motor_time/1000, stepdeg) # '10' Can be changed to lower if works
 
