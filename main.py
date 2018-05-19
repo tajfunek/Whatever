@@ -42,14 +42,10 @@ for i in range(turns):
             pass
             #print("Done")
         error1 = error1.decode('utf-8')
-        """for line in error1.splitlines():
-            #if line.startswith('Error') or line.startswith('stat'):
-            #if "error" or "stat" in line:
-                error = 1"""
         if "Writing PNG image to 'images_new/" not in error1:
             error = 1
                 #break
-
+'''
     # Next camera
     #print("CAM2")
     error = 1
@@ -71,16 +67,11 @@ for i in range(turns):
             pass
             #print("Done")
         error1 = error1.decode('utf-8')
-        """for line in error1.splitlines():
-            if line.startswith('Error') or line.startswith('stat'):
-            #if "error" or "stat" in line:
-                #error = 1
-                #break"""
         if "Writing PNG image to 'images_new/" not in error1:
             error = 1
 
     #print("CAM3")
-    '''GPIO.output(21, 0)
+    GPIO.output(21, 0)
     GPIO.output(20, 1)
     error = 1
     while error:
@@ -101,14 +92,9 @@ for i in range(turns):
             pass
             #print("Done")
         error1 = error1.decode('utf-8')
-        """for line in error1.splitlines():
-            #if line.startswith('Error') or line.startswith('stat'):
-            if "error" or "stat" in line:
-                error = 1
-                #break"""
         if "Writing PNG image to 'images_new/" not in error1:
-            error = 1'''
-
+            error = 1
+'''
     driver.forward(motor_time/1000, stepdeg) # '10' Can be changed to lower if works
 
 
