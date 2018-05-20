@@ -21,6 +21,8 @@ for i in range(turns):
     print("ITERATION: ", i)
     GPIO.output(21, 1)
     GPIO.output(20, 0)
+    GPIO.output(26, 0)
+
 
     #print("CAM1")
     error = 1
@@ -44,10 +46,13 @@ for i in range(turns):
         error1 = error1.decode('utf-8')
         if "Writing PNG image to 'images_new/" not in error1:
             error = 1
-                #break
-'''
     # Next camera
     #print("CAM2")
+
+    GPIO.output(21, 0)
+    GPIO.output(20, 0)
+    GPIO.output(26, 1)
+
     error = 1
     while error:
         error = 0
@@ -72,7 +77,8 @@ for i in range(turns):
 
     #print("CAM3")
     GPIO.output(21, 0)
-    GPIO.output(20, 1)
+    GPIO.output(20, 0)
+    GPIO.output(26, 1)
     error = 1
     while error:
         error = 0
@@ -94,7 +100,7 @@ for i in range(turns):
         error1 = error1.decode('utf-8')
         if "Writing PNG image to 'images_new/" not in error1:
             error = 1
-'''
+
     driver.forward(motor_time/1000, stepdeg) # '10' Can be changed to lower if works
 
 
