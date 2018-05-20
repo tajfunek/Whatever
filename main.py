@@ -23,9 +23,9 @@ try:
         GPIO.output(21, 0)
         GPIO.output(20, 0)
         GPIO.output(26, 1)
+        print("GPIO set")
 
-
-        #print("CAM1")
+        print("CAM1")
         error = 1
         while error:
             error = 0
@@ -48,7 +48,7 @@ try:
             if "Writing PNG image to 'images_new/" not in error1:
                 error = 1
         # Next camera
-        #print("CAM2")
+        print("CAM2")
 
         GPIO.output(21, 1)
         GPIO.output(20, 0)
@@ -76,7 +76,7 @@ try:
             if "Writing PNG image to 'images_new/" not in error1:
                 error = 1
 
-        #print("CAM3")
+        print("CAM3")
         GPIO.output(21, 0)
         GPIO.output(20, 1)
         GPIO.output(26, 0)
