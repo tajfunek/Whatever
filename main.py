@@ -36,7 +36,8 @@ try:
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
-                # print(error1)
+                error1 = error1.decode('utf-8')
+                print(error1)
             except:
                 cam1.kill()
                 print("ERROR")
@@ -64,7 +65,8 @@ try:
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
-                # print(error1)
+                error1 = error1.decode('utf-8')
+                print(error1)
             except:
                 cam1.kill()
                 print("ERROR")
@@ -90,7 +92,8 @@ try:
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
-                # print(error1)
+                error1 = error1.decode('utf-8')
+                print(error1)
             except:
                 cam1.kill()
                 print("ERROR")
