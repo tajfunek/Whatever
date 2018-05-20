@@ -19,9 +19,9 @@ turns = int(256/stepdeg)
 
 for i in range(turns):
     print("ITERATION: ", i)
-    GPIO.output(21, 1)
+    GPIO.output(21, 0)
     GPIO.output(20, 0)
-    GPIO.output(26, 0)
+    GPIO.output(26, 1)
 
 
     #print("CAM1")
@@ -35,7 +35,7 @@ for i in range(turns):
         try:
             #print("Communication")
             _, error1 = cam1.communicate(timeout = 10)
-            print(error1)
+            # print(error1)
         except:
             cam1.kill()
             print("ERROR")
@@ -49,9 +49,9 @@ for i in range(turns):
     # Next camera
     #print("CAM2")
 
-    GPIO.output(21, 0)
+    GPIO.output(21, 1)
     GPIO.output(20, 0)
-    GPIO.output(26, 1)
+    GPIO.output(26, 0)
 
     error = 1
     while error:
@@ -63,7 +63,7 @@ for i in range(turns):
         try:
             #print("Communication")
             _, error1 = cam1.communicate(timeout = 10)
-            print(error1)
+            # print(error1)
         except:
             cam1.kill()
             print("ERROR")
@@ -77,8 +77,8 @@ for i in range(turns):
 
     #print("CAM3")
     GPIO.output(21, 0)
-    GPIO.output(20, 0)
-    GPIO.output(26, 1)
+    GPIO.output(20, 1)
+    GPIO.output(26, 0)
     error = 1
     while error:
         error = 0
@@ -89,7 +89,7 @@ for i in range(turns):
         try:
             #print("Communication")
             _, error1 = cam1.communicate(timeout = 10)
-            print(error1)
+            # print(error1)
         except:
             cam1.kill()
             print("ERROR")
