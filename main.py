@@ -8,10 +8,10 @@ import time as t
 
 _t=t.time()
 
-# GPIO.setwarnings(False)
+GPIO.setwarnings(False)
 os.nice(-5)
 driver.setup()
-GPIO.setup((21, 20), GPIO.OUT)
+GPIO.setup((21, 20, 26), GPIO.OUT)
 print("Starting...\n")
 stepdeg = 4 # resolution - sth is wrong 64*8 is 360deg. not 64*64
 motor_time = 10 # in ms, '10' Can be changed to lower if works
