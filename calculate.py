@@ -110,7 +110,7 @@ def extract(filename, folder, stepDEGR=1):
 
     for i in range(len(pixels)):
         if (i % 3) == 0:
-            pic.append(pixels[i])
+            pic.append(pixels[i+1])
 
     for i in range(h):
         row = pic[i * w: ((i + 1) * w)]
@@ -128,7 +128,7 @@ def extract(filename, folder, stepDEGR=1):
 
 def getpointConst(row):
     """używa średniej arytmetycznej wszystkich pixeli które spełniają warunek"""
-    RED = 200
+    RED = 140
     REDlist = []
     sequences = []
 

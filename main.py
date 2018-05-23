@@ -32,7 +32,7 @@ try:
             #print("Iteration")
             cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
-	     --set brightness=5 --set contrast=255 --rotate 270 \
+             --set brightness=5 --set contrast=255 --rotate 270 \
              images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
