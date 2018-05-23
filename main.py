@@ -16,9 +16,14 @@ print("Starting...\n")
 stepdeg = 4 # resolution - sth is wrong 64*8 is 360deg. not 64*64
 motor_time = 10 # in ms, '10' Can be changed to lower if works
 turns = int(256/stepdeg)
-
+choice = str(input("Do you want to continue from where you left off? y/n "))
+if choice == "y":
+    startpoint = int(input("Which iteration failed? "))
+    print("continueing from ", startpoint)
+else:
+    startpoint = 0
 try:
-    for i in range(turns):
+    for i in range(startpoint, turns):
         print("ITERATION: ", i)
         GPIO.output(21, 0)
         GPIO.output(20, 1)
@@ -63,7 +68,7 @@ try:
             cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
              --set brightness=5 --set contrast=255 --rotate 270 \
-             images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
+             images_new/2_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
@@ -91,7 +96,7 @@ try:
             cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
              --set brightness=5 --set contrast=255 --rotate 270 \
-             images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
+             images_new/3_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
