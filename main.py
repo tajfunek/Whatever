@@ -21,7 +21,7 @@ try:
     for i in range(turns):
         print("ITERATION: ", i)
         GPIO.output(21, 0)
-        GPIO.output(20, 0)
+        GPIO.output(20, 1)
         GPIO.output(26, 1)
         print("GPIO set")
 
@@ -32,12 +32,13 @@ try:
             #print("Iteration")
             cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
+	     --set brightness=5 --set contrast=255 --rotate 270 \
              images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
                 error1 = error1.decode('utf-8')
-                print(error1)
+                #print(error1)
             except:
                 cam1.kill()
                 print("ERROR")
@@ -45,14 +46,14 @@ try:
             finally:
                 pass
                 #print("Done")
-            error1 = error1.decode('utf-8')
+            #error1 = error1.decode('utf-8')
             if "Writing PNG image to 'images_new/" not in error1:
                 error = 1
         # Next camera
         print("CAM2")
 
         GPIO.output(21, 1)
-        GPIO.output(20, 0)
+        GPIO.output(20, 1)
         GPIO.output(26, 0)
 
         error = 1
@@ -66,7 +67,7 @@ try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
                 error1 = error1.decode('utf-8')
-                print(error1)
+                #print(error1)
             except:
                 cam1.kill()
                 print("ERROR")
@@ -74,14 +75,14 @@ try:
             finally:
                 pass
                 #print("Done")
-            error1 = error1.decode('utf-8')
+            #error1 = error1.decode('utf-8')
             if "Writing PNG image to 'images_new/" not in error1:
                 error = 1
 
         print("CAM3")
-        GPIO.output(21, 0)
-        GPIO.output(20, 1)
-        GPIO.output(26, 0)
+        GPIO.output(21, 1)
+        GPIO.output(20, 0)
+        GPIO.output(26, 1)
         error = 1
         while error:
             error = 0
@@ -93,7 +94,7 @@ try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
                 error1 = error1.decode('utf-8')
-                print(error1)
+                #print(error1)
             except:
                 cam1.kill()
                 print("ERROR")
@@ -101,7 +102,7 @@ try:
             finally:
                 pass
                 #print("Done")
-            error1 = error1.decode('utf-8')
+            #error1 = error1.decode('utf-8')
             if "Writing PNG image to 'images_new/" not in error1:
                 error = 1
 
