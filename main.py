@@ -60,9 +60,10 @@ try:
         while error:
             error = 0
                 #print("Iteration")
-            cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video1 \
+            cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
-             images_new/2_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
+             --set brightness=5 --set contrast=255 --rotate 270 \
+             images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
@@ -87,9 +88,10 @@ try:
         while error:
             error = 0
             #print("Iteration")
-            cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video2 \
+            cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
-             images_new/3_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
+             --set brightness=5 --set contrast=255 --rotate 270 \
+             images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
                 _, error1 = cam1.communicate(timeout = 10)
