@@ -41,7 +41,7 @@ try:
              images_new/1_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
-                _, error1 = cam1.communicate(timeout = 10)
+                _, error1 = cam1.communicate(timeout = 15)
                 error1 = error1.decode('utf-8')
                 #print(error1)
             except:
@@ -71,7 +71,7 @@ try:
              images_new/2_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
-                _, error1 = cam1.communicate(timeout = 10)
+                _, error1 = cam1.communicate(timeout = 15)
                 error1 = error1.decode('utf-8')
                 #print(error1)
             except:
@@ -99,7 +99,7 @@ try:
              images_new/3_{}.png".format(i)), stdout = s.PIPE, stderr = s.PIPE)
             try:
                 #print("Communication")
-                _, error1 = cam1.communicate(timeout = 10)
+                _, error1 = cam1.communicate(timeout = 15)
                 error1 = error1.decode('utf-8')
                 #print(error1)
             except:
