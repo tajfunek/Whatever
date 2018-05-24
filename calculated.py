@@ -30,21 +30,24 @@ def calc_everything(tup):
     _time = time.time()
     extracted = c.extract(filename, IMAGES_FOLDER, stepDEGR)
     #print('Extract time: ', time.time()-_time, '  File:  ', filename)
+    if extracted is not None:
+        _time = time.time()
+        output = []
+        if filename.startswith('3'):
+            #pass
+            for point in extracted:
+                output.append(c.calculateTOP(point[0], point[1], point[2]))
+        else:
+            for point in extracted:
+                output.append(c.calculate(point[0], point[1], point[2]))
+        #print('Calculate time: ', time.time()-_time)
 
-    _time = time.time()
-    output = []
-    if filename.startswith('3'):
-        #pass
-        for point in extracted:
-            output.append(c.calculateTOP(point[0], point[1], point[2]))
+        q.put(output)
+        progress = progress + 1
+        print('DONE!!!', filename, "progress: ", progress, '\n')
     else:
-        for point in extracted:
-            output.append(c.calculate(point[0], point[1], point[2]))
-    #print('Calculate time: ', time.time()-_time)
-
-    q.put(output)
-    progress = progress + 1
-    print('DONE!!!', filename, "progress: ", progress, '\n')
+        progress = progress + 1
+        print("Corrupted PNG file: ", filename, "progress: ", progress, '\n')
 
 
 def main():

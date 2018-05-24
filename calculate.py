@@ -14,7 +14,7 @@ import numpy as np
 w = 1024        # szerokość zdjęcia
 h = 1280        # wysokość zdjęcia
 f = 1155        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
-laserDEG = 29  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
+laserDEG = 28.5  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
 laserDIS = 100  # odległość kamera-laser w mm
 #odległość kamera-tacka oraaz camH muszą być podane osobno (niestety)
 
@@ -40,8 +40,8 @@ def calculate(x=0, y=0, deg=0):
     """teraz wywołuje też cartesian() na koniec"""
     # stałe parametry kamery:
     x, y, deg = convert(x, y, deg)
-    k = 136  # k - odległość kamera-środek "tacki" w mm
-    camH = 70  # wysokość na której znajduje się kamera w mm
+    k = 231.75 # k - odległość kamera-środek "tacki" w mm
+    camH = 75  # wysokość na której znajduje się kamera w mm
 
     # obliczenia:
     r = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
@@ -92,38 +92,41 @@ def extract(filename, folder, stepDEGR=1):
     pic = []
     points = []
 
-    #PyPNG:
-    reader = png.Reader(folder + filename + '.png')
-    w, h, pixels, metadata = reader.read_flat()
-    np.array(pixels)
-    # pixels = np.array(PNG_read.read(folder + filename + '.png'))
-    #print('Reading time:', time.time()-_time)
-    _time = time.time()
-    filename = filename.rstrip(".png")
-    cam_no = int(filename[0])
-    deg = int(filename[2:]) * stepDEGR
-    #deg = int(deg)
-    if cam_no == 2:
-        deg += 180
-        if deg >= 360: deg -= 360
-    deg = math.radians(deg)
+    try:
+        #PyPNG:
+        reader = png.Reader(folder + filename + '.png')
+        w, h, pixels, metadata = reader.read_flat()
+        #np.array(pixels)
+        # pixels = np.array(PNG_read.read(folder + filename + '.png'))
+        #print('Reading time:', time.time()-_time)
+        _time = time.time()
+        filename = filename.rstrip(".png")
+        cam_no = int(filename[0])
+        deg = int(filename[2:]) * stepDEGR
+        #deg = int(deg)
+        if cam_no == 2:
+            deg += 180
+            if deg >= 360: deg -= 360
+        deg = math.radians(deg)
 
-    for i in range(len(pixels)):
-        if (i % 3) == 0:
-            pic.append(pixels[i+1])
+        for i in range(len(pixels)):
+            if (i % 3) == 0:
+                pic.append(pixels[i+1]) #zmienić na i+1 !!!!! -
 
-    for i in range(h):
-        row = pic[i * w: ((i + 1) * w)]
-        x = getpointConst(row)  # należy wybrać którą funkcję wykorzystać
-        # x = getpointAvg(row)
-        if x is None:
-            continue
-        y = i
-        data = [x, y, deg]
-        points.append(data)
-    #print('getpoint time:', time.time()-_time)
+        for i in range(h):
+            row = pic[i * w: ((i + 1) * w)]
+            x = getpointConst(row)  # należy wybrać którą funkcję wykorzystać
+            # x = getpointAvg(row)
+            if x is None:
+                continue
+            y = i
+            data = [x, y, deg]
+            points.append(data)
+        #print('getpoint time:', time.time()-_time)
 
-    return points
+        return points
+    except:
+        return None
 
 
 def getpointConst(row):

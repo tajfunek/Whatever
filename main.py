@@ -23,7 +23,7 @@ if choice == "y":
 else:
     startpoint = 0
 try:
-    for i in range(startpoint, turns):
+    for i in range(startpoint, turns*2):
         print("ITERATION: ", i)
         GPIO.output(21, 0)
         GPIO.output(20, 1)
@@ -44,18 +44,18 @@ try:
                 _, error1 = cam1.communicate(timeout = 15)
                 error1 = error1.decode('utf-8')
                 #print(error1)
+                if "Writing PNG image to" not in error1:
+                    error = 1
             except:
-                cam1.kill()
-                print("ERROR")
-                sys.exit()
-            finally:
-                pass
-                #print("Done")
-            #error1 = error1.decode('utf-8')
-            if "Writing PNG image to 'images_new/" not in error1:
                 error = 1
+                """cam1.kill()
+                print("ERROR")
+                sys.exit()"""
+
+
+
         # Next camera
-        print("CAM2")
+        '''print("CAM2")
 
         GPIO.output(21, 1)
         GPIO.output(20, 1)
@@ -111,7 +111,7 @@ try:
                 #print("Done")
             #error1 = error1.decode('utf-8')
             if "Writing PNG image to 'images_new/" not in error1:
-                error = 1
+                error = 1'''
 
         driver.forward(motor_time/1000, stepdeg) # '10' Can be changed to lower if works
 except KeyboardInterrupt:
