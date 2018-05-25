@@ -19,11 +19,11 @@ turns = int(256/stepdeg)
 choice = str(input("Do you want to continue from where you left off? y/n "))
 if choice == "y":
     startpoint = int(input("Which iteration failed? "))
-    print("continueing from ", startpoint)
+    print("continuing from ", startpoint)
 else:
     startpoint = 0
 try:
-    for i in range(startpoint, turns*2):
+    for i in range(startpoint, turns):
         print("ITERATION: ", i)
         GPIO.output(21, 0)
         GPIO.output(20, 1)
@@ -34,6 +34,7 @@ try:
         error = 1
         while error:
             error = 0
+            print("PHOTO")
             #print("Iteration")
             cam1 = s.Popen(shlex.split("sudo fswebcam --resolution 1280x1024 --device /dev/video0 \
              --no-banner --png --no-title --no-subtitle --no-timestamp --no-info \
@@ -46,6 +47,7 @@ try:
                 #print(error1)
                 if "Writing PNG image to" not in error1:
                     error = 1
+                    print(error1)
             except:
                 error = 1
                 """cam1.kill()
@@ -55,7 +57,7 @@ try:
 
 
         # Next camera
-        '''print("CAM2")
+        print("CAM2")
 
         GPIO.output(21, 1)
         GPIO.output(20, 1)
@@ -111,7 +113,7 @@ try:
                 #print("Done")
             #error1 = error1.decode('utf-8')
             if "Writing PNG image to 'images_new/" not in error1:
-                error = 1'''
+                error = 1
 
         driver.forward(motor_time/1000, stepdeg) # '10' Can be changed to lower if works
 except KeyboardInterrupt:
