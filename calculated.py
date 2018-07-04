@@ -10,6 +10,7 @@ output_filename = 'OUTPUT.txt'
 progress = 0
 step = 4
 stepDEGR = 180/(256/step)
+mutex = mp.Mutex()
 def init():
     """Saves to array 'files' names of all photos in images subdirectory"""
     files = []
@@ -43,8 +44,10 @@ def calc_everything(tup):
         #print('Calculate time: ', time.time()-_time)
 
         q.put(output)
+        mutex.lock()
         progress = progress + 1
         print('DONE!!!', filename, "progress: ", progress, '\n')
+        mutex.unlock()
     else:
         progress = progress + 1
         print("Corrupted PNG file: ", filename, "progress: ", progress, '\n')
@@ -57,6 +60,7 @@ def main():
     files.sort()
     m = mp.Manager()
     q = m.Queue()
+
 
     tup = list(zip(files, [q] * len(files)))
     print('Starting!!!')

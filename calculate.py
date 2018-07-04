@@ -14,9 +14,11 @@ import numpy as np
 w = 1024        # szerokość zdjęcia
 h = 1280        # wysokość zdjęcia
 f = 1155        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
-laserDEG = 28.5  # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
-laserDIS = 100  # odległość kamera-laser w mm
-#odległość kamera-tacka oraaz camH muszą być podane osobno (niestety)
+laserDEG = 28.5 # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
+laserDIS = 90   # odległość kamera-laser w mm
+k = 206         # k - odległość kamera-środek "tacki" w mm
+camH = 73       # wysokość na której znajduje się kamera w mm
+#odległość kamera-tacka oraaz camH jak na razie nie muszą być podane osobno
 
 
 def convert(x, y, deg):
@@ -39,9 +41,9 @@ def calculate(x=0, y=0, deg=0):
     """do obliczeń na pomiarach kamer na bokach"""
     """teraz wywołuje też cartesian() na koniec"""
     # stałe parametry kamery:
-    x, y, deg = convert(x, y, deg)
-    k = 231.75 # k - odległość kamera-środek "tacki" w mm
-    camH = 75  # wysokość na której znajduje się kamera w mm
+    #k = 231.75 # k - odległość kamera-środek "tacki" w mm
+    #k = 205
+    #camH = 75  # wysokość na której znajduje się kamera w mm
 
     # obliczenia:
     r = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
@@ -71,8 +73,7 @@ def calculateTOP(x=0, y=0, deg=0):
     """zwraca o drazu punkt w układzie kartezjańskim!!!"""
     """w przeciwieństwie do calculateTOP - działa"""
     # stałe parametry kamery:
-    k = 200
-    x, y, deg = convert(x, y, deg)
+    k = 315
     # obliczenia:
     h1 = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
     Z = k - h1
@@ -120,6 +121,7 @@ def extract(filename, folder, stepDEGR=1):
             if x is None:
                 continue
             y = i
+            x, y, deg = convert(x, y, deg)
             data = [x, y, deg]
             points.append(data)
         #print('getpoint time:', time.time()-_time)
