@@ -46,7 +46,7 @@ def calculate(x=0, y=0, deg=0):
     #camH = 75  # wysokość na której znajduje się kamera w mm
 
     # obliczenia:
-    r = laserDIS / (math.tan(math.radians(laserDEG)) - (x / f))
+    r = laserDIS / (math.tan(math.radians(laserDEG)) + (x / f))
     a = x * r / f
     H = y * r / f + camH
     R = math.sqrt((k - r) ** 2 + a ** 2)
