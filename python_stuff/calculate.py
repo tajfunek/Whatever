@@ -13,7 +13,7 @@ import numpy as np
 #wspólne stałe parametry kamery i skanera oraz zdjęcia:
 w = 1024        # szerokość zdjęcia
 h = 1280        # wysokość zdjęcia
-f = 1155        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
+f = 1110        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
 laserDEG = 28.5 # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
 laserDIS = 90   # odległość kamera-laser w mm
 k = 206         # k - odległość kamera-środek "tacki" w mm

@@ -5,7 +5,7 @@ import time
 import os
 import multiprocessing as mp
 
-IMAGES_FOLDER = 'images_new/'
+IMAGES_FOLDER = 'images'
 output_filename = 'OUTPUT.txt'
 progress = 0
 step = 4

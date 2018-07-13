@@ -1,7 +1,7 @@
 import math
 import calculateTEMP as cd
 
-folder = "testimages/"
+folder = "./"
 filename = "testpic1000.png"
 #prawdziwe wymiary:
 #wspólne stałe parametry kamery i skanera oraz zdjęcia:
@@ -13,13 +13,13 @@ laserDIS = 100  # odległość kamera-laser w mm
 k = 250         # k - odległość kamera-środek "tacki" w mm
 camH = 50       # wysokość na której znajduje się kamera w mm
 
-"""w = 1000     # szerokość zdjęcia
-h = 1000        # wysokość zdjęcia
-f = 500         # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
-laserDEG = 45   # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
-laserDIS = 100  # odległość kamera-laser w mm
-k = 250         # k - odległość kamera-środek "tacki" w mm
-camH = 50       # wysokość na której znajduje się kamera w mm"""
+"""w = 1024        # szerokość zdjęcia
+h = 1280        # wysokość zdjęcia
+f = 1110        # f to ogniskowa w pixelach (odległość "matryca-obiektyw")
+laserDEG = 28.5 # kąt nachylenia lasera (należący do trójkąta z punktem skanowanym)
+laserDIS = 90   # odległość kamera-laser w mm
+k = 206         # k - odległość kamera-środek "tacki" w mm
+camH = 73       # wysokość na której znajduje się kamera w mm"""
 output = open("msm.txt", "w")
 i = 0
 extracted = cd.extract(filename, folder, 0)

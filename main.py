@@ -84,7 +84,7 @@ try:
                 pass
                 #print("Done")
             #error1 = error1.decode('utf-8')
-            if "Writing PNG image to 'images_new/" not in error1:
+            if "Writing PNG image to" not in error1:
                 error = 1
 
         """print("CAM3")
@@ -112,7 +112,7 @@ try:
                 pass
                 #print("Done")
             #error1 = error1.decode('utf-8')
-            if "Writing PNG image to 'images_new/" not in error1:
+            if "Writing PNG image to" not in error1:
                 error = 1"""
 
         driver.forward(motor_time/1000, stepdeg) # '10' Can be changed to lower if works

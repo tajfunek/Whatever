@@ -1,0 +1,28 @@
+import RPi.GPIO as GPIO
+
+GPIO.setwarnings(False)
+GPIO.setup((21, 20, 26), GPIO.OUT)
+
+GPIO.output(21, 0)
+GPIO.output(20, 0)
+GPIO.output(26, 0)
+print("GPIO set: laser ON")
+input("press Enter to continue")
+GPIO.output(21, 1)
+GPIO.output(20, 1)
+GPIO.output(26, 1)
+print("GPIO set: laser OFF")
+while choice != "y":
+    GPIO.output(21, 0)
+    GPIO.output(20, 1)
+    GPIO.output(26, 1)
+    input("GPIO set: 21 ON")
+    GPIO.output(21, 1)
+    GPIO.output(20, 0)
+    GPIO.output(26, 1)
+    input("GPIO set: 20 ON")
+    GPIO.output(21, 1)
+    GPIO.output(20, 1)
+    GPIO.output(26, 0)
+    input("GPIO set: 26 ON")
+    choice = input("continue? y/n ")
