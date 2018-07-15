@@ -12,19 +12,21 @@
 #include <math.h>
 
 // For comparison of two doubles in calculator()
-//#define ERROR 0.05
+//#define ERROR 0.0588
 
 #define THREAD_NO 24
-#define DIR_IMG "./images"
+#define DIR_IMG "./images/"
 #define IMG_NO 128
 #define BUF_LEN 64
 #define FILE_NO 128
 
-#define F 500
-#define LASER_DEG 45
+#define F 1110
+#define LASER_DEG 28.5
 #define LASER_DIS 100
-#define K 250
-#define CAM_H 50
+#define K 194
+#define CAM_H 73
+
+#define STEP 4
 
 int progress;
 int threads_running = 0;
@@ -71,6 +73,8 @@ pthread_t threads[IMG_NO];
 struct ret_png* read_png(char*);
 float getpointConst(struct ret_png*, int);
 struct point* calculator(struct ret_png*, double, double, double);
+double radians(double);
+
 
 void* calculate(void* args) {
   //nice(-10);
@@ -109,11 +113,14 @@ READ_START:
     goto READ_START;
   }
 
+  float stepdeg = 180/(256/STEP);
+  int deg = atoi(deg_string) * stepdeg;
+
   int i;
   for(i = 0; i < png->height; i++) {
     float x = getpointConst(png, i);
     if(x != -1) {
-      struct point* point_car = calculator(png, x, i, 0);
+      struct point* point_car = calculator(png, x, i, radians(deg));
       sprintf(buf, "res%f;%f;%f;",
         point_car->x, point_car->y, point_car->z);
       write(args_ptr->pipefd, buf, BUF_LEN);
